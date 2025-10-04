@@ -3,8 +3,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-// Asumsi Anda memiliki data artikel statis di folder 'data'
-// Kita akan menggunakan data mock untuk saat ini
+// Data Mock / Contoh Data
+// Jika Anda menyimpan data di file terpisah (misalnya data/articles.js), 
+// pastikan Anda mengimpornya di sini.
 const articles = [
     {
         slug: 'panduan-praktis-kontribusi-melalui-github-pull-request',
@@ -12,26 +13,16 @@ const articles = [
         author: 'Gemini Dev',
         date: '2025-10-04',
         content: `
-# Pendahuluan
-
-Halo kontributor! Ini adalah panduan lengkap tentang cara proses submission artikel Anda bekerja. Ketika Anda menekan tombol "Kirim Artikel", sebuah Pull Request (PR) otomatis dibuat di repository GitHub kami.
-
-## Mengapa Menggunakan Pull Request?
-
-Menggunakan PR memastikan:
-1.  **Review Konten:** Konten Anda dapat ditinjau oleh editor sebelum dipublikasikan.
-2.  **Versioning:** Setiap perubahan tercatat dengan baik dalam sejarah Git.
-3.  **Kualitas:** Memastikan artikel memenuhi standar komunitas.
+Ini adalah paragraf pendahuluan tentang Pull Request. Menggunakan PR memastikan: Review Konten, Versioning, dan Kualitas.
 
 ## Langkah-langkah Kontribusi
 
 1.  **Fork Repository:** Salin repository ini ke akun GitHub Anda.
-2.  **Buat Cabang Baru (Branch):** Buat branch baru untuk artikel Anda (e.g., \`feat/judul-artikel-anda\`).
-3.  **Tulis Artikel:** Tulis artikel Anda dalam format **Markdown** (misalnya, \`my-article.md\`). Pastikan format heading, list, dan kode sudah benar.
-4.  **Commit dan Push:** Commit perubahan Anda dan dorong (\`push\`) branch tersebut ke repository fork Anda.
-5.  **Buka Pull Request:** Buka PR baru dari branch Anda ke branch \`main\` di repository utama.
+2.  **Buat Cabang Baru (Branch):** Buat branch baru untuk artikel Anda.
+3.  **Tulis Artikel:** Tulis artikel Anda dalam format Markdown.
+4.  **Commit dan Push:** Commit perubahan Anda dan dorong branch tersebut.
 
-Setelah PR Anda disetujui dan digabungkan (merged), artikel Anda akan otomatis ter-deploy ke blog komunitas!
+Setelah PR disetujui, artikel akan otomatis ter-deploy!
         `
     },
     {
@@ -39,17 +30,16 @@ Setelah PR Anda disetujui dan digabungkan (merged), artikel Anda akan otomatis t
         title: 'Mengapa Static Site Generator (SSG) Terbaik untuk Blog Publik?',
         author: 'Vercel Expert',
         date: '2025-09-28',
-        content: `# Keunggulan SSG
-Static Site Generator (SSG) seperti Next.js (dalam mode static export) menawarkan kecepatan, keamanan, dan skalabilitas yang luar biasa. Jika halaman dibuat sebelum deployment (seperti yang dilakukan Next.js), maka server hanya perlu menyajikan file HTML statis.
+        content: `
+SSG menawarkan kecepatan, keamanan, dan skalabilitas yang luar biasa. Jika halaman dibuat sebelum deployment (seperti yang dilakukan Next.js), maka server hanya perlu menyajikan file HTML statis.
 
-## Kecepatan dan Performa
+### Kecepatan dan Performa
+
 Karena tidak ada proses database atau server-side rendering saat permintaan masuk, waktu pemuatan halaman mendekati instan.
 
-## Keamanan
-Menghilangkan ketergantungan pada database dan server dinamis mengurangi permukaan serangan secara drastis.
+### Keamanan
 
----
-Konten disajikan sebagai contoh saja.
+Menghilangkan ketergantungan pada database dan server dinamis mengurangi permukaan serangan secara drastis.
 `
     }
 ];
@@ -73,6 +63,8 @@ export async function getStaticProps({ params }) {
         return { notFound: true };
     }
 
+    // Menggunakan library sederhana untuk konversi Markdown jika ada
+    // Untuk saat ini, kita biarkan saja sebagai teks biasa agar tidak error
     return { props: { article } };
 }
 
@@ -80,18 +72,28 @@ export async function getStaticProps({ params }) {
 // --- Komponen Tampilan Utama Artikel ---
 
 const ArticleDetail = ({ article }) => {
-    // Digunakan untuk menangani URL lokal saat development
     const router = useRouter(); 
 
-    if (router.isFallback) {
-        return <div>Memuat...</div>;
+    if (router.isFallback || !article) {
+        return <div className="loading-state">Memuat atau Artikel Tidak Ditemukan...</div>;
     }
+    
+    // Fungsi sederhana untuk merender baris baru sebagai paragraf
+    const renderContent = (content) => {
+        return content.split('\n\n').map((paragraph, index) => {
+            if (paragraph.startsWith('##') || paragraph.startsWith('#')) {
+                // Biarkan Heading tetap diinterpretasikan oleh CSS
+                return <div key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />;
+            }
+            // Tambahkan paragraf
+            return <p key={index}>{paragraph}</p>;
+        });
+    };
 
     return (
         <div className="page-container">
             <Head>
                 <title>{article.title} | Blog Komunitas</title>
-                <meta name="description" content={article.content.substring(0, 150)} />
             </Head>
             
             <header className="article-header">
@@ -114,7 +116,9 @@ const ArticleDetail = ({ article }) => {
                     </p>
 
                     {/* Konten Artikel Sebenarnya */}
-                    <div className="article-body" dangerouslySetInnerHTML={{ __html: convertMarkdownToHTML(article.content) }} />
+                    <div className="article-body">
+                        {renderContent(article.content)}
+                    </div>
                 </article>
             </main>
             
@@ -134,6 +138,13 @@ const ArticleDetail = ({ article }) => {
                     max-width: 100%;
                 }
                 
+                .loading-state {
+                    text-align: center;
+                    padding-top: 5rem;
+                    font-size: 1.25rem;
+                    color: var(--gray-700);
+                }
+
                 /* Header Artikel (Mirip Header di index.js) */
                 .article-header {
                     background-color: #ffffff;
@@ -263,42 +274,4 @@ const ArticleDetail = ({ article }) => {
 };
 
 export default ArticleDetail;
-
-
-// --- Fungsi Pembantu (Untuk Konversi Markdown) ---
-// Next.js tidak merender Markdown secara default, jadi kita butuh fungsi sederhana
-// untuk mengubah Markdown menjadi HTML.
-function convertMarkdownToHTML(markdown) {
-    // Konversi Heading
-    markdown = markdown.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-    markdown = markdown.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-    markdown = markdown.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-
-    // Konversi List (sangat dasar, bisa diperluas)
-    markdown = markdown.replace(/^\* (.*$)/gim, '<li>$1</li>');
-    markdown = markdown.replace(/^(<li>.*<\/li>)$/s, '<ul>$1</ul>');
-    
-    // Konversi Bold
-    markdown = markdown.replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>');
-
-    // Konversi Paragraph (ganti newline ganda dengan tag p)
-    const lines = markdown.split('\n');
-    let html = '';
-    let inList = false;
-    
-    lines.forEach(line => {
-        // Handle list logic to avoid wrapping <li> in <p>
-        if (line.startsWith('<li>')) {
-            html += line + '\n';
-            inList = true;
-        } else if (inList) {
-            html += '</ul>\n<p>' + line + '</p>\n';
-            inList = false;
-        } else if (line.trim() !== '') {
-            html += '<p>' + line + '</p>\n';
-        }
-    });
-
-    return html;
-}
 
