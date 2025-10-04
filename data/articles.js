@@ -1,42 +1,56 @@
-// Data Artikel Mock (Contoh)
-// File ini akan diimpor oleh index.js dan [slug].js untuk memastikan Next.js
-// dapat menemukan semua path artikel saat proses build (Static Generation).
+const articles = [
+  {
+    slug: 'panduan-pull-request',
+    title: 'Panduan Praktis Kontribusi Melalui GitHub Pull Request',
+    author: 'Gemini Dev',
+    date: '2025-10-04',
+    content: `
+Halo kontributor! Ini adalah panduan lengkap tentang cara proses submission artikel Anda bekerja.
+Ketika Anda menekan tombol "Kirim Artikel", sebuah Pull Request (PR) akan dibuat di repositori GitHub ini.
 
-export const articles = [
-    {
-        slug: 'panduan-praktis-kontribusi-melalui-github-pull-request',
-        title: 'Panduan Praktis Kontribusi Melalui GitHub Pull Request',
-        author: 'Gemini Dev',
-        date: '2025-10-04',
-        content: `
-Ini adalah paragraf pendahuluan tentang Pull Request. Menggunakan PR memastikan: Review Konten, Versioning, dan Kualitas.
+#### Mekanisme Kontribusi
+1.  **Tulis Konten:** Konten ditulis dalam format Markdown.
+2.  **Kirim PR:** PR memungkinkan komunitas dan admin meninjau perubahan Anda.
+3.  **Verifikasi:** Setelah diverifikasi dan disetujui, PR Anda akan di-*merge*.
+4.  **Deploy Otomatis:** Vercel secara otomatis mendeteksi perubahan dan menayangkan artikel baru Anda.
 
-## Langkah-langkah Kontribusi
+Ini adalah alur kerja yang aman dan efisien untuk kolaborasi blog publik.
+    `,
+  },
+  {
+    slug: 'static-site-generator-terbaik',
+    title: 'Mengapa Static Site Generator (SSG) Terbaik untuk Blog Publik?',
+    author: 'Vercel Expert',
+    date: '2025-09-28',
+    content: `
+SSG (seperti Next.js dalam mode static export) menawarkan kecepatan, keamanan, dan skalabilitas yang luar biasa.
+Karena halaman dibuat sebelum *deployment*, tidak ada proses *server* yang berjalan saat pengguna mengakses artikel Anda.
 
-1.  **Fork Repository:** Salin repository ini ke akun GitHub Anda.
-2.  **Buat Cabang Baru (Branch):** Buat branch baru untuk artikel Anda.
-3.  **Tulis Artikel:** Tulis artikel Anda dalam format Markdown.
-4.  **Commit dan Push:** Commit perubahan Anda dan dorong branch tersebut.
+#### Keuntungan Utama
+* **Kecepatan:** Waktu *load* yang hampir instan.
+* **Keamanan:** Tidak ada *database* yang rentan terhadap serangan.
+* **Biaya:** Sangat murah karena hanya menyajikan file statis (HTML, CSS, JS).
 
-Setelah PR disetujui, artikel akan otomatis ter-deploy!
-        `
-    },
-    {
-        slug: 'mengapa-static-site-generator-ssg-terbaik-untuk-blog-publik',
-        title: 'Mengapa Static Site Generator (SSG) Terbaik untuk Blog Publik?',
-        author: 'Vercel Expert',
-        date: '2025-09-28',
-        content: `
-SSG menawarkan kecepatan, keamanan, dan skalabilitas yang luar biasa. Jika halaman dibuat sebelum deployment (seperti yang dilakukan Next.js), maka server hanya perlu menyajikan file HTML statis.
+Inilah alasan kami memilih Next.js sebagai fondasi blog kolaboratif ini.
+    `,
+  },
+  {
+    slug: 'tips-menulis-markdown',
+    title: 'Tips Cepat Menulis Konten yang Baik dengan Markdown',
+    author: 'Penulis Hebat',
+    date: '2025-09-20',
+    content: `
+Markdown adalah bahasa markup yang ringan dan mudah dibaca, sempurna untuk konten blog.
 
-### Kecepatan dan Performa
+Berikut beberapa tips:
+* Gunakan `#` untuk judul (`<h1>`).
+* Gunakan `**tebal**` untuk menyoroti kata kunci.
+* Gunakan list bernomor (`1. Item A`) atau tanpa nomor (`* Item B`).
+* Untuk blok kode, gunakan tiga *backtick* (\`\`\`) sebelum dan sesudah kode.
 
-Karena tidak ada proses database atau server-side rendering saat permintaan masuk, waktu pemuatan halaman mendekati instan.
-
-### Keamanan
-
-Menghilangkan ketergantungan pada database dan server dinamis mengurangi permukaan serangan secara drastis.
-`
-    }
+Dengan Markdown, Anda dapat fokus pada isi, bukan pada format!
+    `,
+  },
 ];
 
+export default articles;
