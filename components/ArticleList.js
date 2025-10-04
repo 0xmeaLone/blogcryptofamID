@@ -17,30 +17,33 @@ const ArticleList = ({ articles }) => {
         : article.content;
 
     return (
-      <div className="article-card">
-        <h2 className="card-title">
-          {article.title}
-        </h2>
-        <p className="card-meta">
-          Oleh {article.author} | {article.date}
-        </p>
-        
-        <p className="card-content">
-          {truncatedContent}
-        </p>
+      // Menghapus kelas 'article-card' dan memasukkannya di bawah
+      <div className="article-card-wrapper"> 
+        <div className="article-card">
+          <h2 className="card-title">
+            {article.title}
+          </h2>
+          <p className="card-meta">
+            Oleh {article.author} | {article.date}
+          </p>
+          
+          <p className="card-content">
+            {truncatedContent}
+          </p>
 
-        <Link href={`/articles/${article.slug}`} passHref>
-          <a className="card-link">
-            Baca Selengkapnya →
-          </a>
-        </Link>
+          <Link href={`/articles/${article.slug}`} passHref>
+            <a className="card-link">
+              Baca Selengkapnya →
+            </a>
+          </Link>
+        </div>
       </div>
     );
   };
   
   return (
     <div className="article-list-container">
-      {/* --- CSS MURNI DIOPTIMALKAN UNTUK MOBILE --- */}
+      {/* --- CSS MURNI DENGAN MARGIN EKSPILISIT --- */}
       <style jsx global>{`
         /* --- Variabel Warna --- */
         :root {
@@ -52,14 +55,16 @@ const ArticleList = ({ articles }) => {
         .article-grid {
           display: grid;
           grid-template-columns: repeat(1, 1fr); 
-          gap: 2.5rem; /* DITINGKATKAN! Gap 10 (dari 1.5rem) agar kartu tidak menumpuk */
-          padding-bottom: 2rem; /* Jarak bawah list */
+          /* MENGHAPUS GAP di mobile dan menggantinya dengan margin per kartu */
+          gap: 0; 
+          padding-bottom: 2rem; 
         }
+        
         /* Tablet dan ke atas (min-width: 768px) */
         @media (min-width: 768px) {
           .article-grid {
             grid-template-columns: repeat(2, 1fr); 
-            gap: 2rem; 
+            gap: 2rem; /* Gap 8, aktifkan gap di tablet/desktop */
           }
         }
         /* Desktop (min-width: 1024px) */
@@ -69,10 +74,21 @@ const ArticleList = ({ articles }) => {
           }
         }
 
+        /* CARD WRAPPER: Mengatur jarak vertikal antar kartu (KHUSUS MOBILE) */
+        .article-card-wrapper {
+            margin-bottom: 2rem; /* Margin-bottom 8 (32px). Jarak yang sangat lega di mobile */
+        }
+        @media (min-width: 768px) {
+             /* Nonaktifkan margin-bottom di tablet/desktop karena grid gap sudah mengambil alih */
+            .article-card-wrapper {
+                margin-bottom: 0;
+            }
+        }
+
         /* --- Styling Kartu --- */
         .article-card {
           background-color: #ffffff;
-          padding: 1.5rem; /* Padding dikembalikan ke 1.5rem agar konten lega */
+          padding: 1.5rem; 
           border-radius: 1rem; 
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
           border: 1px solid #e5e7eb;
@@ -92,7 +108,7 @@ const ArticleList = ({ articles }) => {
             font-size: 1.875rem; 
             font-weight: 800;
             color: #1f2937;
-            margin-bottom: 2.5rem; /* Ditingkatkan agar judul lebih lega */
+            margin-bottom: 2.5rem; 
         }
         @media (min-width: 640px) {
             .list-header {
