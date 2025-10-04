@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-// Data Mock / Contoh Data
-// Jika Anda menyimpan data di file terpisah (misalnya data/articles.js), 
-// pastikan Anda mengimpornya di sini.
+// Data Mock / Contoh Data - Dibuat di luar komponen agar mudah diakses
 const articles = [
     {
         slug: 'panduan-praktis-kontribusi-melalui-github-pull-request',
@@ -44,51 +42,47 @@ Menghilangkan ketergantungan pada database dan server dinamis mengurangi permuka
     }
 ];
 
-// --- Fungsi Pengambilan Data Next.js ---
-
-// 1. getStaticPaths: Menentukan path mana yang akan di-generate saat build
-export async function getStaticPaths() {
-    const paths = articles.map(article => ({
-        params: { slug: article.slug },
-    }));
-
-    return { paths, fallback: false }; // fallback: false berarti halaman yang tidak ada akan 404
-}
-
-// 2. getStaticProps: Mengambil data untuk path spesifik
-export async function getStaticProps({ params }) {
-    const article = articles.find(a => a.slug === params.slug);
-
-    if (!article) {
-        return { notFound: true };
-    }
-
-    // Menggunakan library sederhana untuk konversi Markdown jika ada
-    // Untuk saat ini, kita biarkan saja sebagai teks biasa agar tidak error
-    return { props: { article } };
-}
-
-
 // --- Komponen Tampilan Utama Artikel ---
 
-const ArticleDetail = ({ article }) => {
-    const router = useRouter(); 
-
-    if (router.isFallback || !article) {
-        return <div className="loading-state">Memuat atau Artikel Tidak Ditemukan...</div>;
-    }
+const ArticleDetail = () => {
+    const router = useRouter();
+    // Ambil slug dari URL
+    const { slug } = router.query;
     
+    // State untuk menyimpan data artikel yang dicari
+    const [article, setArticle] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (slug) {
+            // Cari artikel berdasarkan slug setelah komponen dimuat (Client-Side)
+            const foundArticle = articles.find(a => a.slug === slug);
+            setArticle(foundArticle);
+            setIsLoading(false);
+        }
+    }, [slug]);
+
+
     // Fungsi sederhana untuk merender baris baru sebagai paragraf
     const renderContent = (content) => {
         return content.split('\n\n').map((paragraph, index) => {
+            // Biarkan Heading tetap
             if (paragraph.startsWith('##') || paragraph.startsWith('#')) {
-                // Biarkan Heading tetap diinterpretasikan oleh CSS
                 return <div key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />;
             }
             // Tambahkan paragraf
             return <p key={index}>{paragraph}</p>;
         });
     };
+
+    if (isLoading) {
+        return <div className="loading-state">Memuat Artikel...</div>;
+    }
+
+    if (!article) {
+        // Tampilkan 404 sederhana jika tidak ditemukan
+        return <div className="loading-state not-found">404 | Artikel tidak ditemukan.</div>;
+    }
 
     return (
         <div className="page-container">
@@ -136,6 +130,8 @@ const ArticleDetail = ({ article }) => {
                     padding: 0;
                     margin: 0 auto;
                     max-width: 100%;
+                    min-height: 100vh;
+                    background-color: #f0f4f8; 
                 }
                 
                 .loading-state {
@@ -143,6 +139,11 @@ const ArticleDetail = ({ article }) => {
                     padding-top: 5rem;
                     font-size: 1.25rem;
                     color: var(--gray-700);
+                }
+                .loading-state.not-found {
+                    font-size: 1.5rem;
+                    color: var(--gray-900);
+                    font-weight: bold;
                 }
 
                 /* Header Artikel (Mirip Header di index.js) */
@@ -167,14 +168,14 @@ const ArticleDetail = ({ article }) => {
 
                 /* Main Content dan Padding Responsif */
                 .article-main {
-                    padding: 0 1rem; /* Padding lebih kecil di mobile */
+                    padding: 0 1rem; 
                     margin: 0 auto;
                     max-width: 100%;
                 }
                 @media (min-width: 768px) {
                     .article-main {
                         padding: 0 2rem;
-                        max-width: 800px; /* Lebar maksimum untuk kenyamanan baca di desktop */
+                        max-width: 800px; 
                     }
                 }
 
@@ -219,7 +220,7 @@ const ArticleDetail = ({ article }) => {
 
                 .article-intro {
                     font-style: italic;
-                    color: #9ca3af; /* gray-400 */
+                    color: #9ca3af; 
                     margin-bottom: 2rem;
                     font-size: 0.9rem;
                 }
@@ -230,7 +231,7 @@ const ArticleDetail = ({ article }) => {
                     margin-top: 2rem;
                     margin-bottom: 1rem;
                     line-height: 1.3;
-                    border-bottom: 1px solid #f3f4f6; /* Garis pemisah tipis */
+                    border-bottom: 1px solid #f3f4f6; 
                     padding-bottom: 0.3rem;
                 }
                 .article-body h1 { font-size: 2.25rem; }
@@ -240,7 +241,7 @@ const ArticleDetail = ({ article }) => {
                 .article-body p {
                     margin-bottom: 1.5rem;
                     line-height: 1.65;
-                    color: #4b5563; /* gray-600 */
+                    color: #4b5563; 
                 }
 
                 .article-body ul, .article-body ol {
