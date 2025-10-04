@@ -1,0 +1,35 @@
+/* styles/globals.css */
+
+/* --- 1. Impor Font Inter dari Google Fonts --- */
+/* Ini memastikan tampilan website modern dan bersih */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+/* --- 2. Impor Direktif Dasar Tailwind CSS --- */
+/* Ini WAJIB ada di file global CSS Anda */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- 3. Gaya Tambahan Khusus (Opsional) --- */
+
+/* Atur font default untuk seluruh aplikasi */
+body {
+  font-family: 'Inter', sans-serif;
+  @apply bg-gray-50 text-gray-800;
+}
+
+/* Sedikit styling untuk konten artikel agar lebih mudah dibaca */
+.article-body {
+  /* Memberikan margin vertikal ke elemen-elemen di dalam body artikel */
+  & h4 {
+    @apply text-2xl font-semibold mt-8 mb-3 text-gray-700;
+  }
+  & p {
+    @apply mb-4 leading-relaxed text-gray-700;
+  }
+}
+
+/* Mengatur ukuran maksimum agar konten tetap nyaman di layar besar */
+.max-w-7xl {
+    max-width: 80rem; /* Mengambil nilai max-width default Tailwind */
+}
