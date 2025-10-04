@@ -71,7 +71,7 @@ const ArticleList = ({ articles }) => {
         .article-grid {
           display: grid;
           grid-template-columns: repeat(1, 1fr);
-          gap: 3.5rem; /* DITINGKATKAN LAGI menjadi 3.5rem (sekitar 56px) untuk jarak vertikal yang lega */
+          gap: 1.5rem; /* DITINGKATKAN LAGI menjadi 3.5rem (sekitar 56px) untuk jarak vertikal yang lega */
         }
         @media (min-width: 768px) {
           .article-grid {
