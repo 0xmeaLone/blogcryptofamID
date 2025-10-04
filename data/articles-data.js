@@ -1,32 +1,28 @@
+// File: data/articles-data.js
 
-// data/articles-data.js
-
-// This data simulates content loaded from real Markdown files 
-// in a proper Next.js Static Site Generator (SSG) setup.
 export const articles = [
-  { 
-    slug: 'pengenalan-workflow-git', 
-    title: 'Membuat Blog Publik dengan Alur Kerja Git', 
-    authorName: 'Admin', 
-    content: 'Alur kerja ini memanfaatkan GitHub Pull Request (PR) sebagai mekanisme peninjauan konten. Ini sangat efisien, aman, dan mempermudah kontribusi dari komunitas.', 
-    date: '2025-05-15', 
-    fullContent: `Ini adalah artikel mendalam tentang bagaimana Static Site Generator (SSG) seperti Next.js dipadukan dengan GitHub Actions dan Vercel untuk menciptakan Continuous Integration/Continuous Deployment (CI/CD) yang mulus. 
-    
-Keunggulannya adalah kecepatan loading super cepat karena file yang disajikan adalah HTML statis, dan keamanan tinggi karena tidak ada database server-side yang rentan.
-
-### Keuntungan Utama
-1.  **Kecepatan:** Blog sangat cepat karena sudah di-pre-render.
-2.  **Keamanan:** Mengurangi risiko serangan database.
-3.  **Kolaborasi:** Memanfaatkan Pull Request untuk review konten.` 
-  },
-  { 
-    slug: 'vercel-ci-cd', 
-    title: 'Otomatisasi Deployment Cepat dengan Vercel', 
-    authorName: 'John Doe', 
-    content: 'Vercel secara otomatis mendeteksi perubahan di GitHub dan langsung melakukan deployment tanpa intervensi manual, memastikan konten terbaru selalu tayang.', 
-    date: '2025-05-10', 
-    fullContent: `Vercel mempermudah developer dengan fitur Zero-Config Deployment. Setelah Anda menghubungkan repositori GitHub Anda, setiap kali ada commit baru ke branch utama (main), Vercel secara instan akan menjalankan proses build dan menyediakan URL deployment baru. 
-    
-Bahkan, Vercel dapat membuat 'Preview Deployment' untuk setiap Pull Request, memungkinkan admin melihat hasil akhir artikel sebelum di-merge.` 
-  },
+    {
+        slug: 'panduan-kontribusi-github',
+        title: 'Panduan Praktis Kontribusi Melalui GitHub Pull Request',
+        author: 'Gemini Dev',
+        email: 'gemini@example.com',
+        date: '2025-10-04',
+        content: 'Halo kontributor! Ini adalah panduan lengkap tentang cara proses submission artikel Anda bekerja. Ketika Anda menekan tombol "Kirim Artikel", sebuah Pull Request (PR) akan dibuat secara otomatis di repositori GitHub kami. Anda dapat melihat PR tersebut, dan setelah disetujui dan di-merge oleh moderator, artikel Anda akan otomatis muncul di situs ini berkat Vercel. Proses ini memastikan kualitas dan keamanan konten yang dipublikasikan. Selamat menulis!',
+    },
+    {
+        slug: 'kenapa-memilih-ssg',
+        title: 'Mengapa Static Site Generator (SSG) Terbaik untuk Blog Publik?',
+        author: 'Vercel Expert',
+        email: 'vercel@example.com',
+        date: '2025-09-28',
+        content: 'SSG (seperti Next.js dalam mode static export) menawarkan kecepatan, keamanan, dan skalabilitas yang luar biasa. Karena halaman dibuat sebelumnya (pre-rendered) saat build, tidak ada server yang perlu di-query saat permintaan, menjadikannya sangat cepat. Selain itu, dengan GitHub PR sebagai CMS, kita meminimalkan risiko keamanan yang sering terjadi pada CMS tradisional.',
+    },
+    {
+        slug: 'tips-menulis-markdown',
+        title: 'Tips Cepat Menulis Konten yang Baik dengan Markdown',
+        author: 'Penulis Hebat',
+        email: 'writer@example.com',
+        date: '2025-09-20',
+        content: 'Markdown adalah format yang sangat sederhana dan kuat untuk menulis konten. Gunakan `#` untuk judul, `**tebal**` untuk kata penting, dan list dengan `-` atau `1.`. Hindari kode HTML kompleks. Konten yang bersih dan terstruktur akan lebih cepat disetujui oleh moderator! Ini akan membantu pembaca kami untuk fokus pada isi pesan yang ingin Anda sampaikan.',
+    },
 ];
