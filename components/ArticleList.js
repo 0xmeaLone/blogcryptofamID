@@ -51,27 +51,28 @@ const ArticleList = ({ articles }) => {
         /* Grid Responsif */
         .article-grid {
           display: grid;
-          grid-template-columns: repeat(1, 1fr); /* 1 kolom di mobile (default) */
-          gap: 1.5rem; /* Gap 6 */
+          grid-template-columns: repeat(1, 1fr); 
+          gap: 2.5rem; /* DITINGKATKAN! Gap 10 (dari 1.5rem) agar kartu tidak menumpuk */
+          padding-bottom: 2rem; /* Jarak bawah list */
         }
         /* Tablet dan ke atas (min-width: 768px) */
         @media (min-width: 768px) {
           .article-grid {
-            grid-template-columns: repeat(2, 1fr); /* 2 kolom di tablet */
-            gap: 2rem; /* Gap 8 */
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 2rem; 
           }
         }
         /* Desktop (min-width: 1024px) */
         @media (min-width: 1024px) {
           .article-grid {
-            grid-template-columns: repeat(3, 1fr); /* 3 kolom di desktop */
+            grid-template-columns: repeat(3, 1fr); 
           }
         }
 
         /* --- Styling Kartu --- */
         .article-card {
           background-color: #ffffff;
-          padding: 1.25rem; /* Padding sedikit lebih kecil di mobile untuk efisiensi */
+          padding: 1.5rem; /* Padding dikembalikan ke 1.5rem agar konten lega */
           border-radius: 1rem; 
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
           border: 1px solid #e5e7eb;
@@ -84,23 +85,23 @@ const ArticleList = ({ articles }) => {
         /* Efek Hover */
         .article-card:hover {
           box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-          transform: translateY(-2px); /* Efek lift yang halus */
+          transform: translateY(-2px); 
         }
         
         .list-header {
-            font-size: 1.875rem; /* text-3xl di mobile */
+            font-size: 1.875rem; 
             font-weight: 800;
             color: #1f2937;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem; /* Ditingkatkan agar judul lebih lega */
         }
         @media (min-width: 640px) {
             .list-header {
-                font-size: 2.25rem; /* text-4xl di tablet */
+                font-size: 2.25rem; 
             }
         }
 
         .card-title {
-          font-size: 1.35rem; /* Lebih enak dilihat di mobile */
+          font-size: 1.5rem; 
           font-weight: 700;
           color: #1f2937;
           margin-bottom: 0.5rem;
@@ -154,3 +155,4 @@ const ArticleList = ({ articles }) => {
 };
 
 export default ArticleList;
+
