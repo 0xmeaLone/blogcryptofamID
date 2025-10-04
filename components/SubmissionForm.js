@@ -62,57 +62,67 @@ export default function SubmissionForm() {
     };
 
     return (
-        <div className="bg-white p-8 rounded-xl shadow-2xl max-w-2xl mx-auto">
+        <div className="bg-white p-8 md:p-10 rounded-2xl shadow-2xl max-w-3xl mx-auto border-t-4 border-indigo-500">
             <button 
                 onClick={() => router.push('/')}
-                className="text-indigo-600 hover:text-indigo-800 font-medium mb-6 flex items-center transition duration-200"
+                className="text-gray-600 hover:text-indigo-800 font-medium mb-8 flex items-center transition duration-200 text-sm"
             >
-                <ArrowLeft className="w-5 h-5 mr-2" />
-                Batal dan Kembali
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Batal dan Kembali ke Beranda
             </button>
 
-            <h2 className="text-3xl font-bold text-indigo-700 mb-2 flex items-center">
-                <Send className="w-7 h-7 mr-3" /> Kontribusi Artikel Baru
+            <h2 className="text-3xl font-bold text-gray-800 mb-2 flex items-center">
+                <Send className="w-7 h-7 mr-3 text-indigo-600" /> Tulis Kontribusi Baru
             </h2>
-            <p className="text-md text-gray-600 mb-8">
-                Lengkapi detail di bawah ini. Submission Anda akan dibuat sebagai Pull Request di GitHub.
+            <p className="text-md text-gray-500 mb-8 pb-4 border-b">
+                Artikel akan diubah menjadi Pull Request di GitHub, menunggu tinjauan Admin.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Input Nama, Email, Judul, Konten (seperti kode sebelumnya) */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Input Nama */}
             <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input type="text" name="authorName" value={formData.authorName} onChange={handleInputChange} placeholder="Nama Lengkap Anda" className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-lg" required />
+                <label htmlFor="authorName" className="block text-sm font-medium text-gray-700 mb-1">Nama Anda</label>
+                <User className="absolute left-3 top-[34px] w-5 h-5 text-gray-400" />
+                <input type="text" name="authorName" value={formData.authorName} onChange={handleInputChange} placeholder="Nama Lengkap Anda" className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-lg shadow-sm" required />
             </div>
+
+            {/* Input Email */}
             <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input type="email" name="authorEmail" value={formData.authorEmail} onChange={handleInputChange} placeholder="Email Anda (Tidak dipublikasikan)" className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-lg" required />
+                <label htmlFor="authorEmail" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <Mail className="absolute left-3 top-[34px] w-5 h-5 text-gray-400" />
+                <input type="email" name="authorEmail" value={formData.authorEmail} onChange={handleInputChange} placeholder="Email Anda (Tidak dipublikasikan)" className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-lg shadow-sm" required />
             </div>
+
+            {/* Input Judul */}
             <div className="relative">
-                <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input type="text" name="title" value={formData.title} onChange={handleInputChange} placeholder="Judul Artikel yang Menarik" className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-lg" required />
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Judul Artikel</label>
+                <FileText className="absolute left-3 top-[34px] w-5 h-5 text-gray-400" />
+                <input type="text" name="title" value={formData.title} onChange={handleInputChange} placeholder="Judul Artikel yang Menarik" className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-lg shadow-sm" required />
             </div>
+
+            {/* Input Konten */}
             <div>
-                <textarea name="content" value={formData.content} onChange={handleInputChange} placeholder="Tuliskan isi artikel Anda di sini (Gunakan Markdown)" rows="15" className="w-full p-4 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-base" required />
+                <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">Isi Artikel (Gunakan Markdown)</label>
+                <textarea name="content" value={formData.content} onChange={handleInputChange} placeholder="Tuliskan isi artikel Anda di sini..." rows="15" className="w-full p-4 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-base shadow-sm" required />
             </div>
 
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full py-3 px-4 rounded-xl font-bold transition duration-300 flex justify-center items-center text-lg ${
+                className={`w-full py-4 px-4 rounded-xl font-extrabold transition duration-300 flex justify-center items-center text-xl shadow-lg transform hover:scale-[1.01] ${
                 isSubmitting
                     ? 'bg-indigo-400 cursor-not-allowed'
-                    : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/50'
+                    : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-500/50'
                 }`}
             >
                 {isSubmitting ? (
                 <>
-                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                    Membuat Pull Request...
+                    <Loader2 className="w-6 h-6 animate-spin mr-3" />
+                    Memproses Submission...
                 </>
                 ) : (
                 <>
-                    <Send className="w-5 h-5 mr-2" />
+                    <Send className="w-6 h-6 mr-3" />
                     Kirim Artikel & Buat PR
                 </>
                 )}
@@ -121,12 +131,13 @@ export default function SubmissionForm() {
 
             {/* Status Submission */}
             {submissionStatus && (
-            <div className={`mt-6 p-4 rounded-xl flex items-start ${submissionStatus.success ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'} border-2`}>
+            <div className={`mt-8 p-5 rounded-xl flex items-start shadow-inner ${submissionStatus.success ? 'bg-green-50 text-green-800 border-green-400' : 'bg-red-50 text-red-800 border-red-400'} border-2`}>
                 {getStatusIcon()}
                 <div className='flex-1'>
-                <p className="font-semibold">{submissionStatus.message}</p>
+                <p className="font-semibold text-lg">{submissionStatus.success ? "Submission Berhasil!" : "Gagal!"}</p>
+                <p className="text-base">{submissionStatus.message}</p>
                 {submissionStatus.url && (
-                    <a href={submissionStatus.url} target="_blank" rel="noopener noreferrer" className="text-sm underline hover:text-indigo-600 mt-1 block font-medium">
+                    <a href={submissionStatus.url} target="_blank" rel="noopener noreferrer" className="text-sm underline hover:text-indigo-600 mt-2 block font-medium">
                     Lihat Pull Request (Simulasi)
                     </a>
                 )}
