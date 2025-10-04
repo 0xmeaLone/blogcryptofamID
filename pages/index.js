@@ -1,9 +1,8 @@
-// File: pages/index.js
 import React from 'react';
 import Head from 'next/head';
 import ArticleList from '../components/ArticleList';
-import articles from '../data/articles'; // <-- IMPOR DATA
-import Link from 'next/link'; // Menggunakan import modern
+import articles from '../data/articles'; // <-- Pastikan impor ini benar
+import Link from 'next/link';
 
 // Kita memuat data di server/build time
 export async function getStaticProps() {
@@ -150,4 +149,3 @@ const Home = ({ articles }) => {
 };
 
 export default Home;
-    
