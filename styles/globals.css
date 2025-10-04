@@ -4,20 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tambahan: Mengatur font default dan body */
+/* Mengatur font default Inter dan body */
 body {
   font-family: 'Inter', sans-serif;
   background-color: #f7f7f7; /* Background abu-abu muda */
   color: #333;
 }
 
-/* Mengatur gaya tipografi untuk konten artikel (menggunakan plugin typography) */
+/* Kelas yang akan digunakan untuk konten markdown */
 .article-content {
   line-height: 1.75;
+  color: #333;
 }
-
-.article-content h1, .article-content h2 {
-  font-weight: 700;
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
+.article-content h2, .article-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
 }
