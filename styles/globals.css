@@ -1,21 +1,23 @@
-/* WAJIB: Tailwind Directives untuk memuat semua utility classes */
+/* File: styles/globals.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Tambahkan font Inter */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-
-/* Gaya Dasar (Opsional: mengatur font default) */
-html, body {
+/* Tambahan: Mengatur font default dan body */
+body {
   font-family: 'Inter', sans-serif;
-  background-color: #f8f8f8; /* Warna latar belakang aplikasi yang lembut */
-  color: #1f2937; /* Teks default abu-abu gelap */
+  background-color: #f7f7f7; /* Background abu-abu muda */
+  color: #333;
 }
 
-/* Gaya kustom untuk memastikan semua konten terpusat dan rapi */
-.container-style {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
+/* Mengatur gaya tipografi untuk konten artikel (menggunakan plugin typography) */
+.article-content {
+  line-height: 1.75;
+}
+
+.article-content h1, .article-content h2 {
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
 }
