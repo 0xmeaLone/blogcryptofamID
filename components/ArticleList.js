@@ -1,8 +1,7 @@
-// File: components/ArticleList.js
 import React from 'react';
 import Link from 'next/link';
 
-// Komponen ini menerima data artikel melalui props dari getStaticProps di index.js
+// Komponen ini menerima data artikel melalui props dari index.js
 const ArticleList = ({ articles }) => {
   if (!articles || articles.length === 0) {
     return (
@@ -38,7 +37,7 @@ const ArticleList = ({ articles }) => {
         </p>
 
         {/* Tombol Baca Selengkapnya */}
-        <Link href={`/articles/${article.slug}`} legacyBehavior>
+        <Link href={`/articles/${article.slug}`} passHref>
           <a className="inline-flex items-center text-indigo-700 font-bold hover:text-indigo-900 transition duration-150 mt-4">
             Baca Selengkapnya →
           </a>
