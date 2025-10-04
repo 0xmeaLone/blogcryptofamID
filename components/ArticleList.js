@@ -71,12 +71,12 @@ const ArticleList = ({ articles }) => {
         .article-grid {
           display: grid;
           grid-template-columns: repeat(1, 1fr);
-          gap: 3rem; /* DITINGKATKAN! Dari 2rem menjadi 3rem (48px) untuk jarak lega di mobile */
+          gap: 3.5rem; /* DITINGKATKAN LAGI menjadi 3.5rem (sekitar 56px) untuk jarak vertikal yang lega */
         }
         @media (min-width: 768px) {
           .article-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 2.5rem; /* Jarak sedikit dikurangi di tablet */
+            gap: 2.5rem; 
           }
         }
         @media (min-width: 1024px) {
@@ -89,9 +89,9 @@ const ArticleList = ({ articles }) => {
         .article-card {
           background-color: #ffffff;
           padding: 1.5rem;
-          border-radius: 1rem; /* rounded-2xl */
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
-          border: 1px solid #e5e7eb; /* border-gray-100 */
+          border-radius: 1rem; 
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+          border: 1px solid #e5e7eb; 
           display: flex;
           flex-direction: column;
           height: 100%;
@@ -100,14 +100,14 @@ const ArticleList = ({ articles }) => {
 
         /* Efek Hover */
         .article-card:hover {
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08); /* shadow-2xl */
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08); 
           transform: scale(1.02);
         }
 
         .card-title {
           font-size: 1.5rem;
           font-weight: 700;
-          color: #1f2937; /* gray-800 */
+          color: #1f2937; 
           margin-bottom: 0.5rem;
           line-height: 1.25;
         }
@@ -115,16 +115,16 @@ const ArticleList = ({ articles }) => {
         .card-meta {
           font-size: 0.875rem;
           font-weight: 600;
-          color: #4f46e5; /* indigo-600 */
+          color: #4f46e5; 
           margin-bottom: 0.75rem;
         }
 
         .card-content {
-          color: #4b5563; /* gray-600 */
-          margin-bottom: 1rem;
+          color: #4b5563; 
+          margin-bottom: 0.5rem; /* DIKURANGI: Dari 1rem menjadi 0.5rem (8px) untuk mengurangi jarak kosong di bawah cuplikan */
           flex-grow: 1;
           display: -webkit-box;
-          -webkit-line-clamp: 3; /* line-clamp-3 */
+          -webkit-line-clamp: 3; 
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
@@ -132,14 +132,15 @@ const ArticleList = ({ articles }) => {
         .card-link {
           display: inline-flex;
           align-items: center;
-          color: #4338ca; /* indigo-700 */
+          color: #4338ca; 
           font-weight: 700;
           transition: color 0.15s ease-in-out;
-          margin-top: 1rem;
+          margin-top: 0.5rem; /* DIKURANGI: Dari 1rem menjadi 0.5rem (8px) untuk menaikkan tombol lebih dekat ke cuplikan */
+          text-decoration: none;
         }
 
         .card-link:hover {
-          color: #3730a3; /* indigo-900 */
+          color: #3730a3; 
         }
       `}</style>
         
