@@ -12,11 +12,10 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
       },
-      // Anda bisa menambahkan warna kustom, breakpoint, dll. di sini
     },
   },
   plugins: [
-    // Plugin yang sangat berguna untuk membatasi baris teks (digunakan di ArticleList)
+    // Plugin yang sangat berguna untuk membatasi baris teks (WAJIB ADA)
     require('@tailwindcss/line-clamp'),
   ],
 }
