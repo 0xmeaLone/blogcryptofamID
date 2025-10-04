@@ -1,12 +1,12 @@
-// File: tailwind.config.js
-
-const { fontFamily } = require('tailwindcss/defaultTheme');
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const config = {
+  // Pastikan path konten mencakup semua komponen dan halaman
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
+    './data/**/*.{js,ts,jsx,tsx}', // Opsional, tetapi aman
   ],
   theme: {
     extend: {
@@ -14,11 +14,20 @@ module.exports = {
         // Menggunakan Inter sebagai font utama
         sans: ['Inter', ...fontFamily.sans],
       },
+      colors: {
+        indigo: {
+          '600': '#4f46e5',
+          '700': '#4338ca',
+          '900': '#312e81',
+        }
+      }
     },
   },
   plugins: [
-    // Memastikan plugin di-require dengan benar
+    // Plugins di-require di sini
     require('@tailwindcss/line-clamp'), 
     require('@tailwindcss/typography'),
   ],
-}
+};
+
+export default config;
