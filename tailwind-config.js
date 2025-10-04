@@ -1,42 +1,33 @@
+// File: tailwind.config.js
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {/** @type {import('tailwindcss').Config} */
 module.exports = {
-  // Tentukan file mana yang harus dipindai oleh Tailwind
+  // Pastikan path ini mencakup semua file React Anda (.js, .jsx, .ts, .tsx)
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./app/**/*.{js,ts,jsx,tsx}",
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './data/**/*.{js,ts,jsx,tsx}', // Opsional, tetapi aman
   ],
   theme: {
     extend: {
+      // Menambahkan font Inter
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
       },
+      colors: {
+        // Mendefinisikan warna kustom jika diperlukan
+        indigo: {
+          '600': '#4f46e5',
+          '700': '#4338ca',
+          '900': '#312e81',
+        }
+      }
     },
   },
   plugins: [
-    // Wajib: Plugin untuk membatasi baris teks (digunakan di daftar artikel)
-    require('@tailwindcss/line-clamp'),
-    // Tambahan: Plugin untuk styling Markdown yang lebih baik di halaman detail
+    // Wajib diinstal: npm install @tailwindcss/line-clamp
+    require('@tailwindcss/line-clamp'), 
+    // Wajib diinstal: npm install @tailwindcss/typography
     require('@tailwindcss/typography'),
-  ],
-}
-  // Tentukan file mana yang harus dipindai oleh Tailwind untuk kelas CSS
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./app/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
-      // Menambahkan font Inter sebagai default (direkomendasikan)
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-      },
-    },
-  },
-  plugins: [
-    // Plugin yang sangat berguna untuk membatasi baris teks (WAJIB ADA)
-    require('@tailwindcss/line-clamp'),
   ],
 }
