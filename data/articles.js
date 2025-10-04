@@ -43,10 +43,10 @@ Inilah alasan kami memilih Next.js sebagai fondasi blog kolaboratif ini.
 Markdown adalah bahasa markup yang ringan dan mudah dibaca, sempurna untuk konten blog.
 
 Berikut beberapa tips:
-* Gunakan `#` untuk judul (`<h1>`).
-* Gunakan `**tebal**` untuk menyoroti kata kunci.
-* Gunakan list bernomor (`1. Item A`) atau tanpa nomor (`* Item B`).
-* Untuk blok kode, gunakan tiga *backtick* (\`\`\`) sebelum dan sesudah kode.
+* Gunakan \`#\` untuk judul (\`<h1>\`).
+* Gunakan \`**tebal**\` untuk menyoroti kata kunci.
+* Gunakan list bernomor (\`1. Item A\`) atau tanpa nomor (\`* Item B\`).
+* Untuk blok kode, gunakan tiga *backtick* (\`\`\`\`) sebelum dan sesudah kode.
 
 Dengan Markdown, Anda dapat fokus pada isi, bukan pada format!
     `,
@@ -54,3 +54,4 @@ Dengan Markdown, Anda dapat fokus pada isi, bukan pada format!
 ];
 
 export default articles;
+
