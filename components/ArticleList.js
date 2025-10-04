@@ -71,11 +71,12 @@ const ArticleList = ({ articles }) => {
         .article-grid {
           display: grid;
           grid-template-columns: repeat(1, 1fr);
-          gap: 2rem;
+          gap: 3rem; /* DITINGKATKAN! Dari 2rem menjadi 3rem (48px) untuk jarak lega di mobile */
         }
         @media (min-width: 768px) {
           .article-grid {
             grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem; /* Jarak sedikit dikurangi di tablet */
           }
         }
         @media (min-width: 1024px) {
@@ -156,3 +157,4 @@ const ArticleList = ({ articles }) => {
 };
 
 export default ArticleList;
+
