@@ -1,10 +1,9 @@
-// File: pages/articles/[slug].js
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import articles from '../../data/articles'; // <-- IMPOR DATA STATIS
+import articles from '../../data/articles'; // <-- Pastikan impor ini benar
 
-// --- FUNGSI STATIC GENERATION (PENTING UNTUK MENGHILANGKAN 404) ---
+// --- FUNGSI STATIC GENERATION ---
 
 // 1. getStaticPaths: Memberi tahu Next.js path mana yang harus dibuat saat build
 export async function getStaticPaths() {
@@ -36,7 +35,7 @@ export async function getStaticProps({ params }) {
 // --- KOMPONEN HALAMAN ---
 
 const ArticleDetail = ({ article }) => {
-  // Jika artikel tidak ditemukan (meskipun seharusnya tidak terjadi karena getStaticProps), tampilkan 404
+  // Jika artikel tidak ditemukan (meskipun seharusnya tidak terjadi), tampilkan 404
   if (!article) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -233,4 +232,3 @@ const ArticleDetail = ({ article }) => {
 };
 
 export default ArticleDetail;
-      
