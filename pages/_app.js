@@ -1,6 +1,6 @@
 // pages/_app.jsx
 // MENGGUNAKAN JALUR ROOT PROJECT UNTUK KEAMANAN BUILD
-import 'styles/globals.css'; 
+import '../styles/globals.css'; 
 
 // Ini adalah komponen yang membungkus semua halaman (index, submit, [slug])
 function MyApp({ Component, pageProps }) {
