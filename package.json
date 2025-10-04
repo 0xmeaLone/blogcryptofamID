@@ -1,8 +1,7 @@
-
-
 {
   "name": "public-community-blog",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -17,11 +16,10 @@
     "lucide-react": "latest"
   },
   "devDependencies": {
-    
-    "tailwindcss": "latest", 
+    "tailwindcss": "latest",
     "postcss": "latest",
     "autoprefixer": "latest",
-    "@tailwindcss/line-clamp": "latest", 
+    "@tailwindcss/line-clamp": "latest",
     "@tailwindcss/typography": "latest"
   }
 }
