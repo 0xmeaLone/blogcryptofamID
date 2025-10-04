@@ -60,30 +60,24 @@ export default function Home({ articleData }) {
             max-width: 1280px; /* Max-w-7xl */
             margin-left: auto;
             margin-right: auto;
-            padding: 1rem; /* Padding lebih besar di mobile */
+            padding: 1.5rem; /* Ditingkatkan dari 1rem ke 1.5rem di mobile */
             padding-top: 2.5rem; /* pt-10 */
         }
         @media (min-width: 640px) {
             .main-content-area {
-                padding: 1.5rem; /* sm:p-6 */
+                padding: 2rem; /* sm:p-8 */
                 padding-top: 2.5rem;
             }
         }
-        @media (min-width: 1024px) {
-            .main-content-area {
-                padding: 2rem; /* lg:p-8 */
-                padding-top: 2.5rem;
-            }
-        }
-
+        
         /* --- Header Styling --- */
         .main-header {
             background-color: var(--indigo-700);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* shadow-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
             position: sticky;
             top: 0;
             z-index: 20;
-            padding: 1rem 0; /* padding vertikal */
+            padding: 1rem 0;
         }
 
         .header-container {
@@ -93,16 +87,11 @@ export default function Home({ articleData }) {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 1rem; /* Padding horizontal mobile */
-        }
-        @media (min-width: 640px) {
-            .header-container {
-                padding: 0 1.5rem;
-            }
+            padding: 0 1.5rem; /* Ditingkatkan dari 1rem ke 1.5rem di mobile */
         }
         
         .main-title {
-            font-size: 1.5rem; /* Lebih kecil di mobile */
+            font-size: 1.6rem; /* Ditingkatkan agar ikon dan teks terlihat lebih besar */
             font-weight: 800;
             color: white;
             display: flex;
@@ -110,13 +99,13 @@ export default function Home({ articleData }) {
         }
         @media (min-width: 640px) {
              .main-title {
-                font-size: 1.875rem; /* text-3xl */
+                font-size: 1.875rem; 
             }
         }
         
         .icon-globe {
-            width: 1.75rem; 
-            height: 1.75rem;
+            width: 1.8rem; /* Ukuran ikon disesuaikan */
+            height: 1.8rem;
             margin-right: 0.5rem;
             color: var(--indigo-200);
         }
@@ -127,20 +116,20 @@ export default function Home({ articleData }) {
             background-color: white;
             color: var(--indigo-700);
             font-weight: 700;
-            padding: 0.5rem 1rem; /* py-2 px-4 */
-            border-radius: 9999px; /* rounded-full */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* shadow-lg */
+            padding: 0.6rem 1rem; /* Padding sedikit lebih besar */
+            border-radius: 9999px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
             transition: all 0.2s;
-            border: 2px solid #a5b4fc; /* border-indigo-300 */
-            text-decoration: none; /* Hilangkan garis bawah */
-            font-size: 0.875rem; /* text-sm di mobile */
+            border: 2px solid #a5b4fc; 
+            text-decoration: none; 
+            font-size: 0.9rem; /* Lebih enak dilihat di mobile */
         }
         .submit-button:hover {
-            background-color: #e0e7ff; /* hover:bg-indigo-100 */
+            background-color: #e0e7ff; 
         }
         @media (min-width: 640px) {
              .submit-button {
-                font-size: 1rem; /* text-base */
+                font-size: 1rem; 
             }
         }
 
@@ -148,8 +137,8 @@ export default function Home({ articleData }) {
         .main-footer {
             background-color: var(--gray-800);
             color: white;
-            padding: 1.5rem 0;
-            margin-top: 4rem; /* mt-16 */
+            padding: 2rem 0; /* Padding vertikal ditingkatkan */
+            margin-top: 4rem; 
         }
         
         .footer-container {
@@ -157,8 +146,8 @@ export default function Home({ articleData }) {
             margin-left: auto;
             margin-right: auto;
             text-align: center;
-            padding: 0 1rem;
-            font-size: 0.875rem; /* text-sm */
+            padding: 0 1.5rem; /* Padding horizontal ditingkatkan */
+            font-size: 0.875rem; 
         }
         
         .footer-text-bold {
@@ -174,9 +163,10 @@ export default function Home({ articleData }) {
 }
 
 export async function getStaticProps() {
+    // ... data fetching tetap sama ...
     return {
         props: {
             articleData: articles,
         },
     };
-          }
+}
