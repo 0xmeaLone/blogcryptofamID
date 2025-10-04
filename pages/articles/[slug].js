@@ -117,7 +117,7 @@ const ArticleDetail = ({ article }) => {
           padding: 0 1.5rem;
         }
         .header-title {
-          font-size: 1.5rem; 
+          font-size: 1rem; 
           font-weight: 700;
           margin: 0;
           display: flex;
