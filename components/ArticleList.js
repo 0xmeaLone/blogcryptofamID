@@ -12,7 +12,7 @@ const ArticleList = ({ articles }) => {
     );
   }
 
-  // Komponen Kartu Artikel
+  // Komponen Kartu Artikel (Menggunakan CSS Murni)
   const ArticleCard = ({ article }) => {
     // Fungsi untuk membatasi konten agar rapi di preview
     const truncatedContent = article.content.length > 150 
@@ -20,25 +20,22 @@ const ArticleList = ({ articles }) => {
         : article.content;
 
     return (
-      // Kartu dengan desain modern, bayangan dalam, dan efek hover yang menonjol
-      <div className="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl 
-                      transition-all duration-300 transform hover:scale-[1.02] 
-                      border border-gray-100 flex flex-col h-full">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2 leading-tight">
+      <div className="article-card">
+        <h2 className="card-title">
           {article.title}
         </h2>
-        <p className="text-sm text-indigo-600 font-semibold mb-3">
+        <p className="card-meta">
           Oleh {article.author} | {article.date}
         </p>
         
         {/* Ringkasan Konten */}
-        <p className="text-gray-600 mb-4 flex-grow line-clamp-3">
+        <p className="card-content">
           {truncatedContent}
         </p>
 
         {/* Tombol Baca Selengkapnya */}
         <Link href={`/articles/${article.slug}`} passHref>
-          <a className="inline-flex items-center text-indigo-700 font-bold hover:text-indigo-900 transition duration-150 mt-4">
+          <a className="card-link">
             Baca Selengkapnya →
           </a>
         </Link>
@@ -47,17 +44,113 @@ const ArticleList = ({ articles }) => {
   };
   
   return (
-    <div className="py-2">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-8 tracking-tight">
-            Kontribusi Terbaru
-        </h2>
+    <div className="article-list-container">
+      {/* Menggunakan tag style untuk CSS lokal */}
+      <style jsx global>{`
+        /* Reset dan Typography Dasar */
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f0f4f8; /* Mirip gray-50 */
+          margin: 0;
+          padding: 0;
+        }
         
-        {/* Grid responsif: 1 kolom di mobile, 2 kolom di medium, 3 kolom di large */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article) => (
-                <ArticleCard key={article.slug} article={article} />
-            ))}
-        </div>
+        /* Kontainer Utama */
+        .article-list-container {
+          padding-top: 2rem;
+        }
+
+        .list-header {
+          font-size: 2rem;
+          font-weight: 800;
+          color: #1f2937; /* Mirip gray-900 */
+          margin-bottom: 2rem;
+        }
+
+        /* Grid Responsif */
+        .article-grid {
+          display: grid;
+          grid-template-columns: repeat(1, 1fr);
+          gap: 2rem;
+        }
+        @media (min-width: 768px) {
+          .article-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        @media (min-width: 1024px) {
+          .article-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        /* Styling Kartu */
+        .article-card {
+          background-color: #ffffff;
+          padding: 1.5rem;
+          border-radius: 1rem; /* rounded-2xl */
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+          border: 1px solid #e5e7eb; /* border-gray-100 */
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          transition: all 0.3s ease-in-out;
+        }
+
+        /* Efek Hover */
+        .article-card:hover {
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08); /* shadow-2xl */
+          transform: scale(1.02);
+        }
+
+        .card-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1f2937; /* gray-800 */
+          margin-bottom: 0.5rem;
+          line-height: 1.25;
+        }
+
+        .card-meta {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #4f46e5; /* indigo-600 */
+          margin-bottom: 0.75rem;
+        }
+
+        .card-content {
+          color: #4b5563; /* gray-600 */
+          margin-bottom: 1rem;
+          flex-grow: 1;
+          display: -webkit-box;
+          -webkit-line-clamp: 3; /* line-clamp-3 */
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .card-link {
+          display: inline-flex;
+          align-items: center;
+          color: #4338ca; /* indigo-700 */
+          font-weight: 700;
+          transition: color 0.15s ease-in-out;
+          margin-top: 1rem;
+        }
+
+        .card-link:hover {
+          color: #3730a3; /* indigo-900 */
+        }
+      `}</style>
+        
+      <h2 className="list-header">
+          Kontribusi Terbaru
+      </h2>
+      
+      <div className="article-grid">
+          {articles.map((article) => (
+              <ArticleCard key={article.slug} article={article} />
+          ))}
+      </div>
     </div>
   );
 };
