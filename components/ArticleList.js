@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
+// Komponen ini menerima data artikel melalui props dari index.js
 const ArticleList = ({ articles }) => {
   if (!articles || articles.length === 0) {
     return (
@@ -11,87 +12,85 @@ const ArticleList = ({ articles }) => {
     );
   }
 
+  // Komponen Kartu Artikel (Menggunakan CSS Murni)
   const ArticleCard = ({ article }) => {
+    // Fungsi untuk membatasi konten agar rapi di preview
     const truncatedContent = article.content.length > 150 
         ? article.content.substring(0, 150) + '...' 
         : article.content;
 
     return (
-      // Menghapus kelas 'article-card' dan memasukkannya di bawah
-      <div className="article-card-wrapper"> 
-        <div className="article-card">
-          <h2 className="card-title">
-            {article.title}
-          </h2>
-          <p className="card-meta">
-            Oleh {article.author} | {article.date}
-          </p>
-          
-          <p className="card-content">
-            {truncatedContent}
-          </p>
+      <div className="article-card">
+        <h2 className="card-title">
+          {article.title}
+        </h2>
+        <p className="card-meta">
+          Oleh {article.author} | {article.date}
+        </p>
+        
+        {/* Ringkasan Konten */}
+        <p className="card-content">
+          {truncatedContent}
+        </p>
 
-          <Link href={`/articles/${article.slug}`} passHref>
-            <a className="card-link">
-              Baca Selengkapnya →
-            </a>
-          </Link>
-        </div>
+        {/* Tombol Baca Selengkapnya */}
+        <Link href={`/articles/${article.slug}`} passHref>
+          <a className="card-link">
+            Baca Selengkapnya →
+          </a>
+        </Link>
       </div>
     );
   };
   
   return (
     <div className="article-list-container">
-      {/* --- CSS MURNI DENGAN MARGIN EKSPILISIT --- */}
+      {/* Menggunakan tag style untuk CSS lokal */}
       <style jsx global>{`
-        /* --- Variabel Warna --- */
-        :root {
-            --indigo-700: #4338ca;
-            --gray-800: #1f2937;
+        /* Reset dan Typography Dasar */
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f0f4f8; /* Mirip gray-50 */
+          margin: 0;
+          padding: 0;
         }
         
+        /* Kontainer Utama */
+        .article-list-container {
+          padding-top: 2rem;
+        }
+
+        .list-header {
+          font-size: 2rem;
+          font-weight: 800;
+          color: #1f2937; /* Mirip gray-900 */
+          margin-bottom: 2rem;
+        }
+
         /* Grid Responsif */
         .article-grid {
           display: grid;
-          grid-template-columns: repeat(1, 1fr); 
-          /* MENGHAPUS GAP di mobile dan menggantinya dengan margin per kartu */
-          gap: 0; 
-          padding-bottom: 2rem; 
+          grid-template-columns: repeat(1, 1fr);
+          gap: 2rem;
         }
-        
-        /* Tablet dan ke atas (min-width: 768px) */
         @media (min-width: 768px) {
           .article-grid {
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 2rem; /* Gap 8, aktifkan gap di tablet/desktop */
+            grid-template-columns: repeat(2, 1fr);
           }
         }
-        /* Desktop (min-width: 1024px) */
         @media (min-width: 1024px) {
           .article-grid {
-            grid-template-columns: repeat(3, 1fr); 
+            grid-template-columns: repeat(3, 1fr);
           }
         }
 
-        /* CARD WRAPPER: Mengatur jarak vertikal antar kartu (KHUSUS MOBILE) */
-        .article-card-wrapper {
-            margin-bottom: 2rem; /* Margin-bottom 8 (32px). Jarak yang sangat lega di mobile */
-        }
-        @media (min-width: 768px) {
-             /* Nonaktifkan margin-bottom di tablet/desktop karena grid gap sudah mengambil alih */
-            .article-card-wrapper {
-                margin-bottom: 0;
-            }
-        }
-
-        /* --- Styling Kartu --- */
+        /* Styling Kartu */
         .article-card {
           background-color: #ffffff;
-          padding: 1.5rem; 
-          border-radius: 1rem; 
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
-          border: 1px solid #e5e7eb;
+          padding: 1.5rem;
+          border-radius: 1rem; /* rounded-2xl */
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+          border: 1px solid #e5e7eb; /* border-gray-100 */
           display: flex;
           flex-direction: column;
           height: 100%;
@@ -100,26 +99,14 @@ const ArticleList = ({ articles }) => {
 
         /* Efek Hover */
         .article-card:hover {
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-          transform: translateY(-2px); 
-        }
-        
-        .list-header {
-            font-size: 1.875rem; 
-            font-weight: 800;
-            color: #1f2937;
-            margin-bottom: 2.5rem; 
-        }
-        @media (min-width: 640px) {
-            .list-header {
-                font-size: 2.25rem; 
-            }
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08); /* shadow-2xl */
+          transform: scale(1.02);
         }
 
         .card-title {
-          font-size: 1.5rem; 
+          font-size: 1.5rem;
           font-weight: 700;
-          color: #1f2937;
+          color: #1f2937; /* gray-800 */
           margin-bottom: 0.5rem;
           line-height: 1.25;
         }
@@ -127,33 +114,31 @@ const ArticleList = ({ articles }) => {
         .card-meta {
           font-size: 0.875rem;
           font-weight: 600;
-          color: #4f46e5;
+          color: #4f46e5; /* indigo-600 */
           margin-bottom: 0.75rem;
         }
 
         .card-content {
-          color: #4b5563; 
+          color: #4b5563; /* gray-600 */
           margin-bottom: 1rem;
           flex-grow: 1;
           display: -webkit-box;
-          -webkit-line-clamp: 3; 
+          -webkit-line-clamp: 3; /* line-clamp-3 */
           -webkit-box-orient: vertical;
           overflow: hidden;
-          line-height: 1.5;
         }
 
         .card-link {
           display: inline-flex;
           align-items: center;
-          color: var(--indigo-700);
+          color: #4338ca; /* indigo-700 */
           font-weight: 700;
           transition: color 0.15s ease-in-out;
           margin-top: 1rem;
-          text-decoration: none;
         }
 
         .card-link:hover {
-          color: var(--gray-800);
+          color: #3730a3; /* indigo-900 */
         }
       `}</style>
         
@@ -171,4 +156,3 @@ const ArticleList = ({ articles }) => {
 };
 
 export default ArticleList;
-
