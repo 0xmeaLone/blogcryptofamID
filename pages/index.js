@@ -81,7 +81,7 @@ const Home = ({ articles }) => {
           padding: 0 1.5rem; /* 1.5rem (24px) di mobile */
         }
         .header-title {
-          font-size: 1.5rem; 
+          font-size: 1rem; 
           font-weight: 700;
           margin: 0;
           display: flex;
@@ -118,13 +118,13 @@ const Home = ({ articles }) => {
           flex-grow: 1;
           width: 100%;
           /* PENTING: Padding horizontal responsif */
-          padding: 1.5rem 1.5rem; /* Padding atas-bawah & kiri-kanan */
+          padding: 1rem 1.5rem; /* Padding atas-bawah & kiri-kanan */
         }
 
         /* --- FOOTER --- */
         .footer-container {
           background-color: #e5e7eb; /* Gray-200 */
-          color: #4b5563; /* Gray-600 */
+          color: #00000; /* black-600 */
           padding: 1rem 1.5rem;
           text-align: center;
           margin-top: 3rem;
