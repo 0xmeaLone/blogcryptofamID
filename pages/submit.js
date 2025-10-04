@@ -1,6 +1,7 @@
 // pages/submit.js
 import Head from 'next/head';
 import SubmissionForm from '../components/SubmissionForm';
+import { Globe } from 'lucide-react';
 
 export default function SubmitPage() {
   return (
@@ -10,9 +11,11 @@ export default function SubmitPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       
-      <header className="bg-indigo-700 shadow-lg p-4 sticky top-0 z-20">
+      <header className="bg-indigo-700 shadow-xl p-4 sticky top-0 z-20">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-extrabold text-white">🌐 Blog Komunitas</h1>
+          <h1 className="text-3xl font-extrabold text-white flex items-center">
+            <Globe className="w-7 h-7 mr-2 text-indigo-200" /> Blog Komunitas
+          </h1>
         </div>
       </header>
 
@@ -20,7 +23,7 @@ export default function SubmitPage() {
         <SubmissionForm />
       </main>
       
-      {/* Footer dihilangkan agar fokus pada formulir */}
+      {/* Footer dihilangkan agar fokus pada formulir, atau bisa ditambahkan jika diinginkan */}
     </div>
   );
 }
