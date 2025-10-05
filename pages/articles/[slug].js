@@ -125,7 +125,7 @@ const ArticleDetail = ({ article }) => {
         }
         .header-icon {
           margin-right: 0.5rem;
-          font-size: 1rem;
+          font-size: 1.8rem;
         }
         .back-link {
           background-color: #6366f1;
