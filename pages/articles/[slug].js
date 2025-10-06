@@ -5,7 +5,7 @@ import articles from '../../data/articles'; // <-- Pastikan impor ini benar
 
 // --- FUNGSI STATIC GENERATION ---
 
-// 1. getStaticPaths: Memberi tahu Next.js path mana yang harus dibuat saat build
+// 1. getStaticPaths: Memberi tahu Next.js path mana yang harus di build
 export async function getStaticPaths() {
   const paths = articles.map(article => ({
     params: { slug: article.slug },
