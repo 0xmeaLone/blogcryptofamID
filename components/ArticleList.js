@@ -144,9 +144,7 @@ const ArticleList = ({ articles }) => {
         }
       `}</style>
         
-      <h2 className="list-header">
-          Kontribusi Terbaru
-      </h2>
+      
       
       <div className="article-grid">
           {articles.map((article) => (
