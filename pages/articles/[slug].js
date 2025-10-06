@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import articles from '../data/articles'; // <-- Pastikan impor ini benar
+import articles from '../../data/articles'; // <-- Pastikan impor ini benar
 
 // --- FUNGSI STATIC GENERATION ---
 
