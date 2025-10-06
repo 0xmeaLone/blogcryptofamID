@@ -21,10 +21,8 @@ export async function getStaticProps() {
 }
 
 const Home = ({ articles }) => {
-  // State untuk mengelola status drop-down
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Fungsi untuk membalikkan (toggle) status drop-down
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -62,7 +60,7 @@ const Home = ({ articles }) => {
                   aria-controls="categories-menu" 
                 >
                   Kategori
-                  <span className={`dropdown-arrow ${isDropdownOpen ? 'rotate' : ''}`}>▼</span>
+                  <span className={`dropdown-arrow ${isDropdownOpen ? 'rotate' : ''}`}>▲</span>
                 </button>
                 
                 {isDropdownOpen && (
@@ -103,7 +101,6 @@ const Home = ({ articles }) => {
         </header>
 
         <main className="main-content" id="main-skip-target">
-            {/* Kontribusi Terbaru atau Artikel Terbaru */}
             <h2 className="content-heading">Kontribusi Terbaru</h2> 
             <ArticleList articles={articles} />
         </main>
@@ -142,7 +139,7 @@ const Home = ({ articles }) => {
         
         /* --- HEADER --- */
         .header-container {
-          background-color: #4338ca; /* Indigo-700 */
+          background-color: #4338ca; 
           color: white;
           box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
           padding: 1rem 0; 
@@ -152,30 +149,28 @@ const Home = ({ articles }) => {
           max-width: 1200px;
           margin: 0 auto;
           display: flex;
-          /* PENTING untuk Mobile: Izinkan membungkus */
           flex-wrap: wrap; 
           justify-content: space-between;
           align-items: center;
           padding: 0 1.5rem; 
-          row-gap: 0.75rem; /* Jarak antar baris di mobile */
+          row-gap: 0.75rem; 
         }
         
         .header-actions {
           display: flex;
-          gap: 0.75rem; /* Jarak antar tombol di mobile */
+          gap: 0.75rem; 
           align-items: center;
           flex-shrink: 0; 
         }
 
         .header-title {
-          /* Ukuran default untuk mobile */
           font-size: 1.25rem; 
           font-weight: 700;
           margin: 0;
           display: flex;
           align-items: center;
           letter-spacing: -0.5px;
-          flex-grow: 1; /* Biarkan mengambil ruang yang ada */
+          flex-grow: 1; 
         }
         .header-icon {
           margin-right: 0.5rem;
@@ -184,16 +179,16 @@ const Home = ({ articles }) => {
         
         /* --- Tombol Aksi --- */
         .header-button {
-          background-color: #6366f1; /* Indigo-500 */
+          background-color: #6366f1; 
           color: white;
-          padding: 0.5rem 0.8rem; /* Lebih ringkas di mobile */
+          padding: 0.5rem 0.8rem; 
           border-radius: 9999px; 
           font-weight: 600;
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
           white-space: nowrap; 
-          font-size: 0.85rem; /* Lebih kecil di mobile */
+          font-size: 0.85rem; 
           border: 2px solid transparent;
         }
         .header-button:hover, .header-button:focus {
@@ -215,7 +210,7 @@ const Home = ({ articles }) => {
         .dropdown-button {
           background-color: transparent;
           color: white;
-          padding: 0.5rem 0.8rem; /* Lebih ringkas di mobile */
+          padding: 0.5rem 0.8rem; 
           border-radius: 0.75rem;
           font-weight: 600;
           border: 2px solid #6366f1; 
@@ -223,7 +218,7 @@ const Home = ({ articles }) => {
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
-          font-size: 0.85rem; /* Lebih kecil di mobile */
+          font-size: 0.85rem; 
           line-height: 1;
         }
 
@@ -235,16 +230,20 @@ const Home = ({ articles }) => {
         .dropdown-arrow {
           margin-left: 0.5rem;
           transition: transform 0.2s;
+          line-height: 0; /* Hindari perubahan tinggi tombol */
         }
         
         .dropdown-arrow.rotate {
+            /* Tanda panah ke atas saat menu terbuka */
             transform: rotate(180deg);
         }
 
         .dropdown-menu {
           position: absolute;
           top: 100%; 
-          right: 0;
+          /* PENTING MOBILE: Set ke kiri agar tidak terpotong */
+          left: 0; 
+          right: auto;
           margin-top: 0.5rem; 
           background-color: white;
           border-radius: 0.75rem;
@@ -305,7 +304,6 @@ const Home = ({ articles }) => {
         /* ======================================= */
         @media (min-width: 768px) {
           
-          /* Nonaktifkan wrapping/multi-baris di desktop */
           .header-content {
             flex-wrap: nowrap;
             row-gap: 0;
@@ -319,13 +317,18 @@ const Home = ({ articles }) => {
             font-size: 2rem;
           }
           .header-actions {
-            gap: 1.5rem; /* Spasi yang lebih besar di desktop */
+            gap: 1.5rem; 
           }
 
-          /* Kembalikan ukuran tombol ke normal desktop */
           .header-button, .dropdown-button {
             padding: 0.6rem 1.2rem; 
             font-size: 0.9rem;
+          }
+          
+          /* PENTING DESKTOP: Posisikan menu ke KANAN */
+          .dropdown-menu {
+              left: auto;
+              right: 0; 
           }
 
           .main-content {
@@ -344,4 +347,3 @@ const Home = ({ articles }) => {
 };
 
 export default Home;
-    
