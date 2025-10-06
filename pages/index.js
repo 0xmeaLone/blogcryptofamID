@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // PENTING: Import useState
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import ArticleList from '../components/ArticleList';
@@ -6,9 +6,8 @@ import ArticleList from '../components/ArticleList';
 // NOTE: Sesuaikan path impor ini jika berbeda
 import articles from '../data/articles'; 
 
-// Data Kategori Sederhana (Bisa digenerate secara dinamis dari articlesData)
+// Data Kategori Sederhana (Contoh)
 const categories = ['Teknologi', 'Gaya Hidup', 'Koding', 'Desain', 'Bisnis', 'Semua Kategori'];
-
 
 // Kita memuat data di server/build time (Static Site Generation)
 export async function getStaticProps() {
@@ -16,7 +15,7 @@ export async function getStaticProps() {
     props: {
       articles, 
     },
-    // Optional: Revalidate setiap 60 detik (ISR)
+    // Optional: Revalidate
     // revalidate: 60, 
   };
 }
@@ -46,6 +45,7 @@ const Home = ({ articles }) => {
         <header className="header-container" role="banner">
           <div className="header-content">
             
+            {/* Judul Blog */}
             <p className="header-title"> 
               <span className="header-icon">✍️</span> Blog Komunitas
             </p>
@@ -103,7 +103,8 @@ const Home = ({ articles }) => {
         </header>
 
         <main className="main-content" id="main-skip-target">
-            <h2 className="content-heading">Artikel Terbaru</h2>
+            {/* Kontribusi Terbaru atau Artikel Terbaru */}
+            <h2 className="content-heading">Kontribusi Terbaru</h2> 
             <ArticleList articles={articles} />
         </main>
 
@@ -151,40 +152,48 @@ const Home = ({ articles }) => {
           max-width: 1200px;
           margin: 0 auto;
           display: flex;
+          /* PENTING untuk Mobile: Izinkan membungkus */
+          flex-wrap: wrap; 
           justify-content: space-between;
           align-items: center;
           padding: 0 1.5rem; 
+          row-gap: 0.75rem; /* Jarak antar baris di mobile */
         }
         
         .header-actions {
           display: flex;
-          gap: 1rem; /* Spasi antar elemen */
+          gap: 0.75rem; /* Jarak antar tombol di mobile */
           align-items: center;
+          flex-shrink: 0; 
         }
 
         .header-title {
-          font-size: 1.5rem; 
+          /* Ukuran default untuk mobile */
+          font-size: 1.25rem; 
           font-weight: 700;
           margin: 0;
           display: flex;
           align-items: center;
           letter-spacing: -0.5px;
+          flex-grow: 1; /* Biarkan mengambil ruang yang ada */
         }
         .header-icon {
           margin-right: 0.5rem;
           font-size: 1.5rem;
         }
+        
+        /* --- Tombol Aksi --- */
         .header-button {
           background-color: #6366f1; /* Indigo-500 */
           color: white;
-          padding: 0.6rem 1.2rem; 
+          padding: 0.5rem 0.8rem; /* Lebih ringkas di mobile */
           border-radius: 9999px; 
           font-weight: 600;
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
           white-space: nowrap; 
-          font-size: 0.9rem;
+          font-size: 0.85rem; /* Lebih kecil di mobile */
           border: 2px solid transparent;
         }
         .header-button:hover, .header-button:focus {
@@ -206,7 +215,7 @@ const Home = ({ articles }) => {
         .dropdown-button {
           background-color: transparent;
           color: white;
-          padding: 0.6rem 1.2rem;
+          padding: 0.5rem 0.8rem; /* Lebih ringkas di mobile */
           border-radius: 0.75rem;
           font-weight: 600;
           border: 2px solid #6366f1; 
@@ -214,7 +223,7 @@ const Home = ({ articles }) => {
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
-          font-size: 0.9rem;
+          font-size: 0.85rem; /* Lebih kecil di mobile */
           line-height: 1;
         }
 
@@ -239,7 +248,7 @@ const Home = ({ articles }) => {
           margin-top: 0.5rem; 
           background-color: white;
           border-radius: 0.75rem;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Shadow lebih kuat */
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
           min-width: 180px;
           padding: 0.5rem 0;
           border: 1px solid #e5e7eb;
@@ -256,9 +265,8 @@ const Home = ({ articles }) => {
         }
 
         .dropdown-item:hover {
-          background-color: #eef2ff; /* Indigo-50 */
+          background-color: #eef2ff; 
         }
-
 
         /* --- MAIN CONTENT --- */
         .main-content {
@@ -292,25 +300,39 @@ const Home = ({ articles }) => {
             margin: 0;
         }
 
-        /* MEDIA QUERIES untuk Desktop */
+        /* ======================================= */
+        /* MEDIA QUERIES UNTUK TAMPILAN DESKTOP */
+        /* ======================================= */
         @media (min-width: 768px) {
+          
+          /* Nonaktifkan wrapping/multi-baris di desktop */
+          .header-content {
+            flex-wrap: nowrap;
+            row-gap: 0;
+          }
+
           .header-title {
             font-size: 2rem; 
+            flex-grow: 0;
           }
           .header-icon {
             font-size: 2rem;
           }
+          .header-actions {
+            gap: 1.5rem; /* Spasi yang lebih besar di desktop */
+          }
+
+          /* Kembalikan ukuran tombol ke normal desktop */
+          .header-button, .dropdown-button {
+            padding: 0.6rem 1.2rem; 
+            font-size: 0.9rem;
+          }
+
           .main-content {
             padding: 3rem 2rem; 
           }
           .header-content {
             padding: 0 2rem;
-          }
-          .header-actions {
-            gap: 1.5rem; 
-          }
-          .header-button {
-            font-size: 1rem;
           }
           .content-heading {
             font-size: 2.25rem;
@@ -322,4 +344,4 @@ const Home = ({ articles }) => {
 };
 
 export default Home;
-                          
+    
