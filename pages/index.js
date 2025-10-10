@@ -2,9 +2,6 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Menu, X, Send, Twitter, Linkedin, Github, MessageSquare, Briefcase, DollarSign, BookOpen, Clock, User, ArrowLeft } from 'lucide-react';
 
 // --- Konfigurasi Awal & Data Simulasi ---
-// Asumsikan Tailwind CSS tersedia.
-
-// Data Kategori
 const categories = [
   { name: 'DeFi & Staking', icon: DollarSign, slug: 'defi', color: 'text-teal-400' },
   { name: 'NFTs & Metaverse', icon: MessageSquare, slug: 'nfts', color: 'text-pink-500' },
@@ -36,30 +33,28 @@ const mockArticles = [
   },
 ];
 
-// Fungsi Utility untuk Simulasi GitHub Submission Logic
 const mockSubmitToGitHub = async (articleData) => {
   return new Promise((resolve) => {
-    // Simulasi penundaan 2 detik
     setTimeout(() => {
+      console.log("Submission successful. Next step is actual GitHub API call in Next.js Serverless Function.");
       resolve({ success: true });
     }, 2000);
   });
 };
 
-// Fungsi sederhana untuk konversi Markdown ke HTML (hanya header dan paragraf)
 const renderMarkdown = (markdown) => {
   if (!markdown) return '';
-  // Mengganti heading
   markdown = markdown.replace(/^# (.*)$/gm, '<h2 class="text-3xl font-bold mt-8 mb-4 text-teal-400">$1</h2>');
   markdown = markdown.replace(/^## (.*)$/gm, '<h3 class="text-xl font-semibold mt-6 mb-3 text-pink-500">$1</h3>');
-  // Mengganti paragraf (memastikan baris baru menjadi paragraf)
-  markdown = markdown.replace(/\n\n/g, '</p><p>');
-  markdown = `<p class="leading-relaxed text-gray-300 mb-4">${markdown.trim()}</p>`;
-  // Mengganti bold dan italic (dasar)
   markdown = markdown.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   markdown = markdown.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  // Membersihkan tag p yang mungkin berlebihan di awal/akhir
-  markdown = markdown.replace(/<p><\/p>/g, '');
+  // Mengganti baris baru ganda menjadi paragraf
+  markdown = markdown.split('\n\n').map(p => {
+    if (p.startsWith('<h') || p.startsWith('<strong>') || p.startsWith('<em>') || p.startsWith('*Artikel ini')) {
+        return p; // Jangan bungkus heading/strong/em/disclaimer
+    }
+    return `<p class="leading-relaxed text-gray-300 mb-4">${p.trim()}</p>`;
+  }).join('');
   return { __html: markdown };
 };
 
@@ -83,7 +78,6 @@ const AnimatedMenuItem = ({ name, icon: Icon, index, isMenuOpen, onClick }) => {
     </a>
   );
 };
-
 
 // Komponen Kartu Preview Artikel
 const PostCard = ({ article, onReadMore }) => {
@@ -133,7 +127,7 @@ const PostList = ({ articles, onReadMore, onNavigate }) => (
       </p>
     </header>
 
-    {/* Tombol Kirim Artikel diletakkan di sini agar mudah diakses */}
+    {/* Tombol Kirim Artikel */}
     <div className="flex justify-center mb-12">
         <button
             onClick={() => onNavigate('submit')}
@@ -209,7 +203,7 @@ const SubmissionForm = ({ onNavigate }) => {
         article: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submissionStatus, setSubmissionStatus] = useState(null); // 'success', 'error', null
+    const [submissionStatus, setSubmissionStatus] = useState(null); // 'success', 'error', 'validation_error', null
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -223,7 +217,6 @@ const SubmissionForm = ({ onNavigate }) => {
         setIsSubmitting(true);
 
         if (!formData.name || !formData.email || !formData.title || !formData.article) {
-            // Mengganti alert() dengan pesan di UI
             setSubmissionStatus('validation_error');
             setIsSubmitting(false);
             return;
@@ -238,7 +231,7 @@ const SubmissionForm = ({ onNavigate }) => {
                 contentMarkdown: formData.article 
             });
             setSubmissionStatus('success');
-            setFormData({ name: '', email: '', walletAddress: '', title: '', article: '' }); // Clear form
+            setFormData({ name: '', email: '', walletAddress: '', title: '', article: '' });
         } catch (error) {
             console.error('Submission Error:', error);
             setSubmissionStatus('error');
@@ -298,13 +291,11 @@ const SubmissionForm = ({ onNavigate }) => {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
 
-                    {/* Bagian Informasi Pribadi */}
                     <div className="grid md:grid-cols-2 md:gap-8">
                         <FuturisticInput label="Nama Lengkap" name="name" required />
                         <FuturisticInput label="Email Aktif" name="email" type="email" required />
                     </div>
 
-                    {/* Wallet Address (Opsional/Reward) */}
                     <FuturisticInput 
                     label="Alamat Wallet (ERC-20/Solana/dll.)" 
                     name="walletAddress" 
@@ -314,11 +305,9 @@ const SubmissionForm = ({ onNavigate }) => {
                     Opsional: Wallet ini dapat digunakan untuk mengirimkan token apresiasi.
                     </p>
 
-                    {/* Bagian Artikel */}
                     <FuturisticInput label="Judul Artikel" name="title" required />
                     <FuturisticInput label="Isi Artikel (Gunakan Markdown)" name="article" required rows={15} />
 
-                    {/* Status Feedback */}
                     {submissionStatus === 'success' && (
                         <div className="p-4 bg-green-900/50 border border-green-500 rounded-lg text-green-300 text-center flex items-center justify-center space-x-2">
                             <Send className="w-5 h-5" />
@@ -337,7 +326,6 @@ const SubmissionForm = ({ onNavigate }) => {
                     )}
 
 
-                    {/* Tombol Submit */}
                     <div className="pt-4 flex justify-center">
                         <button
                             type="submit"
@@ -369,7 +357,6 @@ const SubmissionForm = ({ onNavigate }) => {
 
 // Komponen Utama
 const App = () => {
-  // State Navigasi: 'list' (halaman utama), 'article' (detail artikel), 'submit' (formulir)
   const [currentPage, setCurrentPage] = useState('list');
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -402,35 +389,46 @@ const App = () => {
     return <PostList articles={mockArticles} onReadMore={handleReadMore} onNavigate={handleNavigate} />;
   }, [currentPage, selectedArticle]);
 
+  // --- Konten CSS yang diperbaiki menggunakan String Biasa untuk stabilitas kompilasi ---
+  const customStyles = `
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    /* CSS Kustom untuk Efek Glow dan Transisi */
+    .glow-shadow {
+      box-shadow: 0 0 10px rgba(52, 211, 163, 0.5), 0 0 20px rgba(52, 211, 163, 0.2);
+    }
+    .btn-glow {
+      transition: all 0.3s ease;
+    }
+    .btn-glow:hover {
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.7); /* Pink glow on hover */
+      transform: translateY(-2px);
+    }
+    .menu-overlay {
+      z-index: 40; /* Di bawah navbar, di atas konten */
+    }
+    /* Custom CSS untuk prose markdown rendering */
+    .prose-invert h1 { color: #34d399; }
+    .prose-invert h2 { color: #5eead4; }
+    .prose-invert strong { color: #f472b6; }
+    .prose-invert em { color: #a5f3fc; }
+  `;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-['Inter'] antialiased">
-      {/* Script untuk Inter Font dan Tailwind JIT/Config (Opsional jika sudah dikonfigurasi) */}
+      {/* Skrip Tailwind - tetap diperlukan untuk setup file tunggal */}
       <script src="https://cdn.tailwindcss.com"></script>
-      <style>
-        {`
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-          /* CSS Kustom untuk Efek Glow dan Transisi */
-          .glow-shadow {
-            box-shadow: 0 0 10px rgba(52, 211, 163, 0.5), 0 0 20px rgba(52, 211, 163, 0.2);
-          }
-          .btn-glow {
-            transition: all 0.3s ease;
-          }
-          .btn-glow:hover {
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.7); /* Pink glow on hover */
-            transform: translateY(-2px);
-          }
-          .menu-overlay {
-            z-index: 40; /* Di bawah navbar, di atas konten */
-          }
-          /* Custom CSS untuk prose markdown rendering */
-          .prose-invert h1 { color: #34d399; }
-          .prose-invert h2 { color: #5eead4; }
-          .prose-invert strong { color: #f472b6; }
-          .prose-invert em { color: #a5f3fc; }
-        `}
-      </style>
+      
+      {/* --- Style Block Diperbaiki --- */}
+      {/* Menggunakan dangerouslySetInnerHTML untuk stabilitas kompilasi di Next.js/Vercel */}
+      <style dangerouslySetInnerHTML={{ __html: customStyles }} />
 
       {/* --- Header (Navigasi) --- */}
-      <header className="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-sm border-b border-teal-500
+      <header className="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-sm border-b border-teal-500/20 shadow-lg shadow-gray-900">
+        <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+          <h1 
+            onClick={() => handleNavigate('list')}
+            className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-pink-500 tracking-wider cursor-pointer"
+          >
+            CryptoFamId
+          </h1>
+          <
