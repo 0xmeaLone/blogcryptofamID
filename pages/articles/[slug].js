@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 // NOTE: Mengganti path impor ini dengan file dummy karena dependensi tidak tersedia
-// import articles from '../../data/articles'; 
+import articles from '../../data/articles'; 
 
 // DUMMY DATA START (untuk memastikan kode dapat berjalan)
 const articles = [
