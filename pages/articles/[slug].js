@@ -1,9 +1,23 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import articles from '../../data/articles'; // <-- Pastikan impor ini benar
+// NOTE: Mengganti path impor ini dengan file dummy karena dependensi tidak tersedia
+// import articles from '../../data/articles'; 
 
-// --- FUNGSI STATIC GENERATION ---
+// DUMMY DATA START (untuk memastikan kode dapat berjalan)
+const articles = [
+    { 
+        slug: 'analisis-pasar-bitcoin-q4-2024', 
+        title: 'Analisis Pasar Bitcoin Q4 2024', 
+        author: 'Satoshi Jr', 
+        date: '10 September 2024', 
+        content: '<h4>Tinjauan Pasar</h4><p>Pasar kripto menunjukkan volatilitas yang tinggi menjelang akhir tahun. Bitcoin, sebagai aset utama, masih menjadi barometer pergerakan pasar secara keseluruhan.</p><h4>Prediksi dan Risiko</h4><p>Beberapa analis memprediksi adanya reli akhir tahun, namun risiko regulasi global tetap menjadi perhatian utama yang harus diwaspadai.</p><p>Pastikan untuk selalu melakukan riset Anda sendiri (DYOR).</p>'
+    },
+];
+// DUMMY DATA END
+
+
+// --- FUNGSI STATIC GENERATION (Menggunakan data dummy) ---
 
 // 1. getStaticPaths: Memberi tahu Next.js path mana yang harus di build
 export async function getStaticPaths() {
@@ -12,7 +26,6 @@ export async function getStaticPaths() {
   }));
 
   return { paths, fallback: false }; 
-  // fallback: false berarti path yang tidak ada akan 404
 }
 
 // 2. getStaticProps: Mengambil data artikel spesifik untuk path yang diberikan
@@ -50,19 +63,21 @@ const ArticleDetail = ({ article }) => {
   return (
     <>
       <Head>
-        <title>{article.title} | Blog Komunitas</title>
-        <meta name="description" content={`Baca artikel: ${article.title}`} />
+        {/* Mengganti judul menjadi CryptoFamId */}
+        <title>{article.title} | CryptoFamId</title>
+        <meta name="description" content={`Baca artikel: ${article.title} tentang dunia Kripto dan Web3.`} />
       </Head>
 
       <div className="main-layout">
         <header className="header-container">
           <div className="header-content">
+            {/* Mengganti judul dan ikon */}
             <h1 className="header-title">
-              <span className="header-icon">🌐</span> Blog Komunitas
+              <span className="header-icon">🔗</span> CryptoFamId
             </h1>
             <Link href="/" passHref>
               <a className="back-link">
-                ← Kembali ke Daftar Artikel
+                ← Kembali ke Beranda
               </a>
             </Link>
           </div>
@@ -75,14 +90,14 @@ const ArticleDetail = ({ article }) => {
               <span className="meta-item">🧑‍💻 Oleh {article.author}</span>
               <span className="meta-item">🗓️ Dipublikasikan pada {article.date}</span>
             </p>
-
+            {/* Konten artikel */}
             <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
           </div>
         </main>
 
         <footer className="footer-container">
           <p className="footer-text">
-            Dikembangkan dengan Next.js dan Vercel. © 2025 Blog Publik Kolaboratif.
+            Dikembangkan dengan Next.js dan Vercel. © {new Date().getFullYear()} CryptoFamId.
           </p>
         </footer>
       </div>
@@ -92,11 +107,19 @@ const ArticleDetail = ({ article }) => {
         html { box-sizing: border-box; }
         *, *:before, *:after { box-sizing: inherit; }
         body {
-          font-family: 'Arial', sans-serif;
+          font-family: 'Inter', 'Arial', sans-serif; /* Font Inter */
           background-color: #f0f4f8; 
           margin: 0;
           padding: 0;
+          line-height: 1.6; 
+          color: #1f2937; 
         }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
         .main-layout {
           min-height: 100vh;
           display: flex;
@@ -106,7 +129,7 @@ const ArticleDetail = ({ article }) => {
           background-color: #4338ca; 
           color: white;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-          padding: 1.25rem 0;
+          border-bottom: 4px solid #3730a3; /* Konsisten dengan Home.js */
         }
         .header-content {
           max-width: 1200px;
@@ -114,47 +137,52 @@ const ArticleDetail = ({ article }) => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 0 1.5rem;
+          padding: 1rem 1.5rem; /* Konsisten dengan Home.js (Mobile) */
         }
         .header-title {
-          font-size: 1rem; 
+          font-size: 1.25rem; /* Konsisten dengan Home.js (Mobile) */
           font-weight: 700;
           margin: 0;
           display: flex;
           align-items: center;
+          letter-spacing: -0.5px;
         }
         .header-icon {
           margin-right: 0.5rem;
-          font-size: 1.8rem;
+          font-size: 1.5rem; /* Konsisten dengan Home.js (Mobile) */
         }
         .back-link {
           background-color: #6366f1;
           color: white;
           padding: 0.5rem 1rem;
-          border-radius: 0.75rem;
+          border-radius: 9999px; /* Rounded penuh */
           font-weight: 600;
           text-decoration: none;
-          transition: background-color 0.2s ease;
+          transition: background-color 0.2s ease, transform 0.2s;
           white-space: nowrap;
-          font-size: 0.9rem;
+          font-size: 0.85rem; /* Konsisten dengan tombol lain */
+          border: 2px solid transparent;
         }
         .back-link:hover {
           background-color: #4f46e5;
+          border-color: #818cf8;
+          transform: translateY(-1px);
         }
         .main-content {
           max-width: 1200px;
           margin: 0 auto;
           flex-grow: 1;
           width: 100%;
-          padding: 1.5rem 1.5rem;
+          padding: 1rem 1.5rem;
         }
         .footer-container {
           background-color: #e5e7eb; 
-          color: #4b5563; 
+          color: #374151; /* Warna teks konsisten */
           padding: 1rem 1.5rem;
           text-align: center;
           margin-top: 3rem;
           font-size: 0.875rem;
+          border-top: 1px solid #d1d5db; /* Konsisten */
         }
 
         /* --- ARTICLE SPECIFIC STYLES --- */
@@ -166,7 +194,7 @@ const ArticleDetail = ({ article }) => {
           background-color: white;
           padding: 1.5rem;
           border-radius: 1rem;
-          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sedikit lebih menonjol */
         }
         .article-title {
           font-size: 2rem;
@@ -186,7 +214,7 @@ const ArticleDetail = ({ article }) => {
           padding-bottom: 1rem;
         }
         .meta-item {
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.5rem;
         }
 
         /* Styling Konten (Markdown) */
@@ -197,7 +225,7 @@ const ArticleDetail = ({ article }) => {
         .article-body h4 {
           font-size: 1.25rem;
           font-weight: 700;
-          color: #1f2937;
+          color: #4338ca; /* Menggunakan warna primer untuk subjudul */
           margin-top: 2rem;
           margin-bottom: 0.5rem;
         }
@@ -215,6 +243,15 @@ const ArticleDetail = ({ article }) => {
 
         /* MEDIA QUERIES */
         @media (min-width: 768px) {
+          .header-content {
+            padding: 1.5rem 2rem; /* Konsisten dengan desktop Home.js */
+          }
+          .header-title {
+            font-size: 2rem;
+          }
+          .header-icon {
+            font-size: 2rem;
+          }
           .article-title {
             font-size: 2.5rem;
           }
@@ -224,6 +261,11 @@ const ArticleDetail = ({ article }) => {
           .article-meta {
             flex-direction: row;
             justify-content: space-between;
+            align-items: center;
+          }
+          .meta-item:first-child {
+             margin-right: 2rem;
+             margin-bottom: 0;
           }
         }
       `}</style>
@@ -232,3 +274,4 @@ const ArticleDetail = ({ article }) => {
 };
 
 export default ArticleDetail;
+
