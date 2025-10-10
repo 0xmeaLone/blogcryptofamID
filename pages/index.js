@@ -431,4 +431,84 @@ const App = () => {
           >
             CryptoFamId
           </h1>
-          <
+          <button
+            onClick={toggleMenu}
+            className="p-2 rounded-full border-2 border-teal-400 text-teal-400 transition duration-300 hover:bg-teal-400 hover:text-gray-900"
+            aria-label={isMenuOpen ? "Tutup Menu" : "Buka Menu"}
+          >
+            {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+          </button>
+        </div>
+      </header>
+
+      {/* --- Menu Epik (Overlay) --- */}
+      <nav
+        className={`fixed top-16 left-0 right-0 h-[calc(100vh-64px)] bg-gray-900/95 menu-overlay backdrop-blur-md overflow-hidden transition-opacity duration-500 ease-in-out ${
+          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        aria-hidden={!isMenuOpen}
+      >
+        <div className="flex flex-col items-center justify-start h-full pt-12">
+          <h2 className={`text-3xl font-semibold mb-8 text-pink-500 transition-opacity duration-300 ${isMenuOpen ? 'opacity-100 delay-300' : 'opacity-0'}`}>
+            Kategori
+          </h2>
+          {categories.map((item, index) => (
+            <AnimatedMenuItem
+              key={item.slug}
+              name={item.name}
+              icon={item.icon}
+              index={index}
+              isMenuOpen={isMenuOpen}
+              onClick={() => { toggleMenu(); }}
+            />
+          ))}
+          <button
+            onClick={() => handleNavigate('submit')}
+            className={`
+              mt-10 p-3 bg-pink-500 text-gray-900 font-extrabold rounded-lg btn-glow
+              transform transition-all duration-500 ease-in-out text-lg shadow-lg
+              ${isMenuOpen ? 'translate-y-0 opacity-100 delay-[800ms]' : 'translate-y-10 opacity-0'}
+            `}
+            style={{ transitionDelay: isMenuOpen ? `${categories.length * 150 + 400}ms` : '0ms' }}
+          >
+            Tulis Artikel
+          </button>
+        </div>
+      </nav>
+
+      {/* --- Konten Utama (Conditional Rendering) --- */}
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {renderContent}
+      </main>
+
+      {/* --- Footer (Futuristik) --- */}
+      <footer className="mt-20 border-t border-teal-500/20 bg-gray-900 pt-8 pb-10">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h3 className="text-xl font-extrabold text-teal-400 mb-4">
+            CryptoFamId | Komunitas Web3 Indonesia
+          </h3>
+          
+          <div className="flex justify-center space-x-6 mb-8">
+            <a href="#" className="p-3 bg-gray-800 rounded-full text-white hover:text-pink-500 transition duration-300 glow-shadow hover:shadow-pink-500/50" aria-label="Twitter">
+              <Twitter className="w-6 h-6" />
+            </a>
+            <a href="#" className="p-3 bg-gray-800 rounded-full text-white hover:text-pink-500 transition duration-300 glow-shadow hover:shadow-pink-500/50" aria-label="LinkedIn">
+              <Linkedin className="w-6 h-6" />
+            </a>
+            <a href="#" className="p-3 bg-gray-800 rounded-full text-white hover:text-pink-500 transition duration-300 glow-shadow hover:shadow-pink-500/50" aria-label="GitHub">
+              <Github className="w-6 h-6" />
+            </a>
+          </div>
+
+          <p className="text-sm text-gray-500">
+            &copy; {new Date().getFullYear()} CryptoFamId. Dibangun dengan Next.js & Semangat Komunitas.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+
