@@ -1,430 +1,328 @@
-import React, { useState } from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
-// NOTE: Mengganti path impor ini dengan file dummy karena dependensi tidak tersedia
-// import ArticleList from '../components/ArticleList'; 
-// import articles from '../data/articles'; 
+import React, { useState, useCallback } from 'react';
+import { Menu, X, Send, Twitter, Linkedin, Github, MessageSquare, Briefcase, DollarSign, BookOpen } from 'lucide-react';
+// Catatan: Ini adalah file tunggal untuk representasi Next.js/React.
+// Asumsikan Tailwind CSS tersedia di lingkungan Next.js Anda.
 
-// DUMMY COMPONENTS & DATA START
-const ArticleList = ({ articles }) => (
-    <div className="article-list-grid">
-        {articles.map((article) => (
-            <article key={article.id} className="article-card">
-                <h3 className="card-title">{article.title}</h3>
-                <p className="card-meta">
-                    <span className="text-gray-500">Oleh: {article.author}</span> | 
-                    <span className="font-semibold text-indigo-600 ml-1">{article.category}</span>
-                </p>
-                <p className="card-summary">{article.summary}</p>
-                <Link href={`/article/${article.id}`} passHref>
-                    <a className="read-more-link">Baca Selengkapnya →</a>
-                </Link>
-            </article>
-        ))}
-    </div>
-);
+// --- Konfigurasi Awal (Simulasi Firestore untuk State Management Sederhana) ---
+// Dalam aplikasi Next.js/Vercel yang sebenarnya, form ini akan
+// mengirimkan data ke API Route yang kemudian berinteraksi dengan GitHub API
+// untuk membuat Pull Request artikel baru.
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+const apiKey = ""; 
 
-const articles = [
-    { id: 1, title: 'Analisis Pasar Bitcoin Q4 2024', author: 'Satoshi Jr', category: 'Kripto', summary: 'Prediksi dan tren pergerakan harga Bitcoin menjelang akhir tahun.' },
-    { id: 2, title: 'Panduan Membangun Wallet Web3', author: 'DevChain', category: 'Koding', summary: 'Langkah-langkah praktis mengimplementasikan fitur wallet non-custodial.' },
-    { id: 3, title: 'Etika Desain UI/UX dalam DApps', author: 'VividPixel', category: 'Desain', summary: 'Menerapkan prinsip desain yang fokus pada kepercayaan dan transparansi.' },
-    { id: 4, title: 'Strategi DeFi Yield Farming Terbaru', author: 'FarmMaster', category: 'Bisnis', summary: 'Memaksimalkan keuntungan dari protokol DeFi dengan risiko terukur.' },
+// Fungsi utility untuk Simulasi GitHub Submission Logic
+// Dalam proyek Next.js yang sesungguhnya, fungsi ini akan berada di Vercel Serverless Function (e.g., /api/submit-article)
+const mockSubmitToGitHub = async (articleData) => {
+  return new Promise((resolve) => {
+    // Simulasi penundaan API dan logic backend
+    setTimeout(() => {
+      console.log("--- START SIMULASI SUBMISSION KE GITHUB ---");
+      console.log("Data Artikel Siap Diproses:", articleData);
+      console.log("\nLangkah-langkah di Serverless Function Next.js/Vercel:");
+      console.log("1. Validasi data input.");
+      console.log("2. Gunakan GitHub Personal Access Token (PAT) yang disimpan di Environment Variables Vercel.");
+      console.log("3. Panggil GitHub REST API untuk: 'GET /repos/{owner}/{repo}/contents/{path}' (untuk mendapatkan SHA file saat ini/memastikan file tidak duplikat).");
+      console.log("4. Panggil GitHub REST API untuk: 'PUT /repos/{owner}/{repo}/contents/articles/{article-slug}.md'.");
+      console.log("   - Payload 'PUT' berisi konten artikel yang di-encode base64 dan pesan commit.");
+      console.log("   - Opsi terbaik: Buat *branch* baru dan *Pull Request* (PR) untuk proses moderasi.");
+      console.log("5. Setelah PR di-merge, Vercel akan otomatis me-rebuild situs Next.js Anda dan artikel akan terbit.");
+      console.log("--- END SIMULASI SUBMISSION KE GITHUB ---");
+      resolve({ success: true });
+    }, 2000);
+  });
+};
+
+// Data Kategori untuk Menu Epik
+const categories = [
+  { name: 'DeFi & Staking', icon: DollarSign, slug: 'defi' },
+  { name: 'NFTs & Metaverse', icon: MessageSquare, slug: 'nfts' },
+  { name: 'Teknologi Blockchain', icon: Briefcase, slug: 'tech' },
+  { name: 'Berita & Analisis Pasar', icon: BookOpen, slug: 'news' },
 ];
-const categories = ['Kripto', 'Koding', 'Desain', 'Bisnis', 'Gaya Hidup', 'Semua Kategori'];
-// DUMMY COMPONENTS & DATA END
 
+// Komponen Item Menu dengan Animasi Staggered
+const AnimatedMenuItem = ({ name, icon: Icon, index, isMenuOpen, onClick }) => {
+  // Hitung delay berdasarkan index untuk efek "satu per satu" (slowly and smoothly)
+  const delay = isMenuOpen ? `${index * 150}ms` : '0ms';
 
-// Kita memuat data di server/build time (Static Site Generation)
-export async function getStaticProps() {
-  // Anggap ini adalah data yang dimuat dari file 'articles'
-  return {
-    props: {
-      articles, 
-    },
-  };
-}
-
-const Home = ({ articles }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Mengubah nama state dari isDropdownOpen ke isMenuOpen
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-  
   return (
-    <>
-      {/* --- SEO & Metadata --- */}
-      <Head>
-        <title>CryptoFamId | Platform Berbagi Artikel Kripto & Web3</title>
-        <meta name="description" content="Platform berbagi artikel komunitas tentang Kripto, Blockchain, dan Web3 berbasis Git." />
-        <meta name="keywords" content="crypto, blockchain, web3, blog komunitas, nextjs, git, artikel, publik" />
-        <meta property="og:title" content="CryptoFamId" />
-        <meta property="og:description" content="Platform berbagi artikel komunitas berbasis Git." />
-        <meta property="og:type" content="website" />
-      </Head>
-
-      <div className="main-layout">
-        <header className="header-container" role="banner">
-          <div className="header-content">
-            
-            {/* Judul Blog - Diubah ke CryptoFamId */}
-            <p className="header-title"> 
-              <span className="header-icon">🔗</span> CryptoFamId
-            </p>
-            
-            {/* Wrapper untuk aksi: Tombol Menu dan Tombol Tulis */}
-            <div className="header-actions">
-              
-              {/* --- Tombol Kategori (Menu Toggle) --- */}
-              <button 
-                onClick={toggleMenu}
-                className="menu-toggle-button" // Class baru
-                aria-expanded={isMenuOpen} 
-                aria-controls="categories-menu" 
-              >
-                Kategori
-                <span className={`menu-arrow ${isMenuOpen ? 'rotate' : ''}`}>▼</span>
-              </button>
-              
-              {/* Tombol Tulis Artikel */}
-              <Link href="/submit" passHref>
-                <a className="header-button" role="button">
-                  <span className="button-icon">📝</span> Tulis Artikel
-                </a>
-              </Link>
-            </div> {/* End header-actions */}
-
-          </div>
-          
-          {/* --- SLIDING CATEGORY MENU (Panel) --- */}
-          <div className={`category-menu-overlay ${isMenuOpen ? 'open' : ''}`}>
-            <nav 
-              className="category-menu-content" 
-              id="categories-menu"
-              role="menu" 
-            >
-              {categories.map((category) => (
-                <Link 
-                  key={category} 
-                  href={category === 'Semua Kategori' ? '/' : `/category/${category.toLowerCase().replace(/\s/g, '-')}`} 
-                  passHref 
-                >
-                  <a 
-                    className="menu-item" // Class baru
-                    onClick={toggleMenu} 
-                    role="menuitem" 
-                  >
-                    {category}
-                  </a>
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-        </header>
-
-        <main className="main-content" id="main-skip-target">
-            <h2 className="content-heading">Kontribusi Terbaru (Kripto & Web3)</h2> 
-            <ArticleList articles={articles} />
-        </main>
-
-        <footer className="footer-container" role="contentinfo">
-          <p className="footer-text">
-            Dikembangkan dengan Next.js dan Vercel. © {new Date().getFullYear()} CryptoFamId.
-          </p>
-        </footer>
-      </div>
-
-      <style jsx global>{`
-        /* --- GLOBAL & TYPOGRAPHY --- */
-        html { box-sizing: border-box; }
-        *, *:before, *:after { box-sizing: inherit; }
-        body {
-          font-family: 'Inter', 'Arial', sans-serif; 
-          background-color: #f0f4f8; 
-          margin: 0;
-          padding: 0;
-          line-height: 1.6; 
-          color: #1f2937; 
-        }
-        
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        /* --- ARTICLE LIST STYLING (For Dummy Data) --- */
-        .article-list-grid {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        }
-        .article-card {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
-            transition: transform 0.2s;
-            display: flex;
-            flex-direction: column;
-        }
-        .article-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-        }
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-            color: #111827;
-        }
-        .card-meta {
-            font-size: 0.875rem;
-            color: #6b7280;
-            margin-bottom: 1rem;
-        }
-        .card-summary {
-            flex-grow: 1;
-            color: #4b5563;
-            margin-bottom: 1rem;
-        }
-        .read-more-link {
-            display: inline-block;
-            color: #4338ca;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-        .read-more-link:hover {
-            color: #3730a3;
-        }
-
-        /* --- LAYOUT --- */
-        .main-layout {
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-        }
-        
-        /* --- HEADER --- */
-        .header-container {
-          background-color: #4338ca; 
-          color: white;
-          box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-          border-bottom: 4px solid #3730a3;
-        }
-        .header-content {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: flex;
-          flex-wrap: wrap; 
-          justify-content: space-between;
-          align-items: center;
-          padding: 1rem 1.5rem; /* Padding dipindahkan ke sini */
-          row-gap: 0.75rem; 
-        }
-        
-        .header-actions {
-          display: flex;
-          gap: 0.75rem; 
-          align-items: center;
-          flex-shrink: 0; 
-        }
-
-        .header-title {
-          font-size: 1.25rem; 
-          font-weight: 700;
-          margin: 0;
-          display: flex;
-          align-items: center;
-          letter-spacing: -0.5px;
-          flex-grow: 1; 
-        }
-        .header-icon {
-          margin-right: 0.5rem;
-          font-size: 1.5rem;
-        }
-        
-        /* --- Tombol Aksi --- */
-        .header-button {
-          background-color: #6366f1; 
-          color: white;
-          padding: 0.5rem 0.8rem; 
-          border-radius: 9999px; 
-          font-weight: 600;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          white-space: nowrap; 
-          font-size: 0.85rem; 
-          border: 2px solid transparent;
-        }
-        .header-button:hover, .header-button:focus {
-          background-color: #4f46e5; 
-          border-color: #818cf8;
-          transform: translateY(-1px); 
-        }
-        .button-icon {
-          margin-right: 0.5rem;
-          font-size: 1rem;
-        }
-        
-        /* --- SLIDING CATEGORY MENU (Menu Toggle Button) --- */
-        .menu-toggle-button {
-          background-color: transparent;
-          color: white;
-          padding: 0.5rem 0.8rem; 
-          border-radius: 0.75rem;
-          font-weight: 600;
-          border: 2px solid #6366f1; 
-          cursor: pointer;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          font-size: 0.85rem; 
-          line-height: 1;
-        }
-
-        .menu-toggle-button:hover, .menu-toggle-button:focus {
-          background-color: #4f46e5;
-          border-color: #818cf8;
-        }
-
-        .menu-arrow {
-          margin-left: 0.5rem;
-          transition: transform 0.5s;
-          line-height: 0; 
-        }
-        
-        .menu-arrow.rotate {
-            /* Tanda panah ke atas saat menu terbuka */
-            transform: rotate(-180deg);
-        }
-
-        /* --- SLIDING CATEGORY MENU (Panel Overlay) --- */
-        .category-menu-overlay {
-            overflow: hidden;
-            max-height: 0; /* Awalnya tersembunyi */
-            transition: max-height 0.5s ease-in-out, background-color 0.5s ease; /* Transisi halus */
-            width: 100%;
-            /* Latar belakang transparan sesuai permintaan */
-            background-color: rgba(0, 0, 0, 0); 
-            border-top: 1px solid transparent;
-        }
-
-        .category-menu-overlay.open {
-            max-height: 300px; /* Tinggi maksimum yang cukup untuk semua kategori */
-            background-color: rgba(255, 255, 255, 0.9); /* Latar belakang semi-transparan putih/abu saat terbuka */
-            border-top: 1px solid #d1d5db;
-        }
-
-        .category-menu-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 1.5rem; 
-            display: flex; 
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .category-menu-content .menu-item {
-            color: #4338ca; 
-            background-color: white; 
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: 1px solid #c7d2fe;
-            white-space: nowrap;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .category-menu-content .menu-item:hover {
-            background-color: #eef2ff;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(67, 56, 202, 0.1);
-            color: #3730a3;
-        }
-
-
-        /* --- MAIN CONTENT --- */
-        .main-content {
-          max-width: 1200px;
-          margin: 0 auto;
-          flex-grow: 1;
-          width: 100%;
-          padding: 1rem 1.5rem; 
-        }
-
-        .content-heading {
-            font-size: 1.75rem;
-            margin-top: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: #111827; 
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 0.5rem;
-        }
-
-        /* --- FOOTER --- */
-        .footer-container {
-          background-color: #e5e7eb; 
-          color: #374151; 
-          padding: 1rem 1.5rem;
-          text-align: center;
-          margin-top: 3rem;
-          font-size: 0.875rem;
-          border-top: 1px solid #d1d5db;
-        }
-        .footer-text {
-            margin: 0;
-        }
-
-        /* ======================================= */
-        /* MEDIA QUERIES UNTUK TAMPILAN DESKTOP */
-        /* ======================================= */
-        @media (min-width: 768px) {
-          
-          .header-content {
-            flex-wrap: nowrap;
-            row-gap: 0;
-            padding: 1.5rem 2rem;
-          }
-
-          .header-title {
-            font-size: 2rem; 
-            flex-grow: 0;
-          }
-          .header-icon {
-            font-size: 2rem;
-          }
-          .header-actions {
-            gap: 1.5rem; 
-          }
-
-          .header-button, .menu-toggle-button {
-            padding: 0.6rem 1.2rem; 
-            font-size: 0.9rem;
-          }
-          
-          .main-content {
-            padding: 3rem 2rem; 
-          }
-          
-          .content-heading {
-            font-size: 2.25rem;
-          }
-          .category-menu-content {
-              padding: 1.5rem 2rem; 
-              justify-content: flex-start; /* Kategori rata kiri di desktop */
-          }
-        }
-      `}</style>
-    </>
+    <a
+      href={`#${name.toLowerCase().replace(/ & /g, '').replace(/\s/g, '-')}`}
+      onClick={onClick}
+      className={`
+        flex items-center space-x-4 p-4 text-xl font-bold cursor-pointer
+        transform transition-all duration-500 ease-in-out
+        hover:text-pink-500 hover:scale-[1.02] 
+        ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}
+      `}
+      style={{ transitionDelay: delay }}
+    >
+      <Icon className="w-6 h-6 text-teal-400" />
+      <span>{name}</span>
+    </a>
   );
 };
 
-export default Home;
+
+const App = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    walletAddress: '',
+    title: '',
+    article: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState(null); // 'success', 'error', null
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    setSubmissionStatus(null);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmissionStatus(null);
+    setIsSubmitting(true);
+
+    // Basic client-side validation
+    if (!formData.name || !formData.email || !formData.title || !formData.article) {
+      alert('Mohon lengkapi semua kolom yang wajib diisi.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      // Panggil simulasi untuk menjelaskan alur kerja GitHub API
+      await mockSubmitToGitHub(formData);
+      setSubmissionStatus('success');
+      setFormData({ name: '', email: '', walletAddress: '', title: '', article: '' }); // Clear form
+    } catch (error) {
+      console.error('Submission Error:', error);
+      setSubmissionStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Komponen Input Futuristik
+  const FuturisticInput = ({ label, name, type = 'text', required = false, rows = 1 }) => (
+    <div className="mb-6">
+      <label htmlFor={name} className="block text-sm font-medium text-teal-400 mb-2">
+        {label} {required && <span className="text-pink-500">*</span>}
+      </label>
+      {rows > 1 ? (
+        <textarea
+          id={name}
+          name={name}
+          value={formData[name]}
+          onChange={handleChange}
+          required={required}
+          rows={rows}
+          className="w-full p-3 bg-gray-800 border-2 border-gray-700 rounded-lg text-white placeholder-gray-500
+                     focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition duration-200 resize-y"
+          placeholder={`Masukkan ${label.toLowerCase()} di sini...`}
+        />
+      ) : (
+        <input
+          type={type}
+          id={name}
+          name={name}
+          value={formData[name]}
+          onChange={handleChange}
+          required={required}
+          className="w-full p-3 bg-gray-800 border-2 border-gray-700 rounded-lg text-white placeholder-gray-500
+                     focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition duration-200"
+          placeholder={`Masukkan ${label.toLowerCase()} di sini...`}
+        />
+      )}
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white font-['Inter'] antialiased">
+      {/* Script untuk Inter Font dan Tailwind JIT/Config (Opsional jika sudah dikonfigurasi) */}
+      <script src="https://cdn.tailwindcss.com"></script>
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+          /* CSS Kustom untuk Efek Glow dan Transisi */
+          .glow-shadow {
+            box-shadow: 0 0 10px rgba(52, 211, 163, 0.5), 0 0 20px rgba(52, 211, 163, 0.2);
+          }
+          .btn-glow {
+            transition: all 0.3s ease;
+          }
+          .btn-glow:hover {
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.7); /* Pink glow on hover */
+            transform: translateY(-2px);
+          }
+          .menu-overlay {
+            z-index: 40; /* Di bawah navbar, di atas konten */
+          }
+        `}
+      </style>
+
+      {/* --- Header (Navigasi) --- */}
+      <header className="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-sm border-b border-teal-500/20 shadow-lg shadow-gray-900">
+        <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+          <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-pink-500 tracking-wider">
+            CryptoFamId
+          </h1>
+          <button
+            onClick={toggleMenu}
+            className="p-2 rounded-full border-2 border-teal-400 text-teal-400 transition duration-300 hover:bg-teal-400 hover:text-gray-900"
+            aria-label={isMenuOpen ? "Tutup Menu" : "Buka Menu"}
+          >
+            {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+          </button>
+        </div>
+      </header>
+
+      {/* --- Menu Epik (Overlay) --- */}
+      {/* Animasi keluar satu per satu, perlahan & smooth dari atas ke bawah */}
+      <nav
+        className={`fixed top-16 left-0 right-0 h-[calc(100vh-64px)] bg-gray-900/95 menu-overlay backdrop-blur-md overflow-hidden transition-opacity duration-500 ease-in-out ${
+          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        aria-hidden={!isMenuOpen}
+      >
+        <div className="flex flex-col items-center justify-start h-full pt-12">
+          <h2 className={`text-3xl font-semibold mb-8 text-pink-500 transition-opacity duration-300 ${isMenuOpen ? 'opacity-100 delay-300' : 'opacity-0'}`}>
+            Kategori
+          </h2>
+          {categories.map((item, index) => (
+            <AnimatedMenuItem
+              key={item.slug}
+              name={item.name}
+              icon={item.icon}
+              index={index}
+              isMenuOpen={isMenuOpen}
+              onClick={toggleMenu}
+            />
+          ))}
+          <a
+            href="#submission"
+            onClick={toggleMenu}
+            className={`
+              mt-10 p-3 bg-pink-500 text-gray-900 font-extrabold rounded-lg btn-glow
+              transform transition-all duration-500 ease-in-out text-lg
+              ${isMenuOpen ? 'translate-y-0 opacity-100 delay-[800ms]' : 'translate-y-10 opacity-0'}
+            `}
+            style={{ transitionDelay: isMenuOpen ? `${categories.length * 150 + 400}ms` : '0ms' }}
+          >
+            Tulis Artikel
+          </a>
+        </div>
+      </nav>
+
+      {/* --- Konten Utama (Form Submission) --- */}
+      <main className="max-w-4xl mx-auto px-4 py-12">
+        <section id="submission" className="bg-gray-800 p-8 md:p-12 rounded-2xl border border-teal-400/30 glow-shadow shadow-xl">
+          <h2 className="text-4xl font-extrabold mb-4 text-center text-teal-400">
+            Kirim Artikel Anda
+          </h2>
+          <p className="text-center text-gray-400 mb-8">
+            Berkontribusi dalam revolusi Web3. Tulis ide dan analisis Anda. Kami menggunakan Git-CMS untuk mempublikasikan.
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+
+            {/* Bagian Informasi Pribadi */}
+            <div className="grid md:grid-cols-2 md:gap-8">
+              <FuturisticInput label="Nama Lengkap" name="name" required />
+              <FuturisticInput label="Email Aktif" name="email" type="email" required />
+            </div>
+
+            {/* Wallet Address (Opsional/Reward) */}
+            <FuturisticInput 
+              label="Alamat Wallet (ERC-20/Solana/dll.)" 
+              name="walletAddress" 
+              required={false}
+              />
+            <p className="text-xs text-gray-500 -mt-4 mb-8">
+              Opsional: Wallet ini dapat digunakan untuk mengirimkan token apresiasi di masa mendatang.
+            </p>
+
+            {/* Bagian Artikel */}
+            <FuturisticInput label="Judul Artikel" name="title" required />
+            <FuturisticInput label="Isi Artikel (Gunakan Markdown)" name="article" required rows={15} />
+
+            {/* Status Feedback */}
+            {submissionStatus === 'success' && (
+              <div className="p-4 bg-green-900/50 border border-green-500 rounded-lg text-green-300 text-center flex items-center justify-center space-x-2">
+                <Send className="w-5 h-5" />
+                <span>Artikel berhasil dikirim! Tim kami akan meninjau Pull Request Anda.</span>
+              </div>
+            )}
+
+            {submissionStatus === 'error' && (
+              <div className="p-4 bg-red-900/50 border border-red-500 rounded-lg text-red-300 text-center">
+                Terjadi kesalahan saat pengiriman. Silakan coba lagi.
+              </div>
+            )}
+
+
+            {/* Tombol Submit */}
+            <div className="pt-4 flex justify-center">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full md:w-auto px-8 py-3 text-lg font-bold rounded-xl btn-glow
+                           bg-pink-600 hover:bg-pink-700 text-white
+                           transition duration-300 ease-in-out
+                           disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center space-x-2">
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Mengirim ke Gateway...</span>
+                  </span>
+                ) : (
+                  'Kirim Artikel & Jadi Fam'
+                )}
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
+
+      {/* --- Footer (Futuristik) --- */}
+      <footer className="mt-20 border-t border-teal-500/20 bg-gray-900 pt-8 pb-10">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h3 className="text-xl font-extrabold text-teal-400 mb-4">
+            CryptoFamId | Komunitas Web3 Indonesia
+          </h3>
+          
+          <div className="flex justify-center space-x-6 mb-8">
+            <a href="#" className="p-3 bg-gray-800 rounded-full text-white hover:text-pink-500 transition duration-300 glow-shadow hover:shadow-pink-500/50" aria-label="Twitter">
+              <Twitter className="w-6 h-6" />
+            </a>
+            <a href="#" className="p-3 bg-gray-800 rounded-full text-white hover:text-pink-500 transition duration-300 glow-shadow hover:shadow-pink-500/50" aria-label="LinkedIn">
+              <Linkedin className="w-6 h-6" />
+            </a>
+            <a href="#" className="p-3 bg-gray-800 rounded-full text-white hover:text-pink-500 transition duration-300 glow-shadow hover:shadow-pink-500/50" aria-label="GitHub">
+              <Github className="w-6 h-6" />
+            </a>
+          </div>
+
+          <p className="text-sm text-gray-500">
+            &copy; {new Date().getFullYear()} CryptoFamId. Dibangun dengan Next.js & Semangat Komunitas.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
 
