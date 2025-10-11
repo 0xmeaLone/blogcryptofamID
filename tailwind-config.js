@@ -6,7 +6,7 @@ const config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
-    './data/**/*.{js,ts,jsx,tsx}', // Opsional, tetapi aman
+    './data/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
@@ -19,14 +19,17 @@ const config = {
           '600': '#4f46e5',
           '700': '#4338ca',
           '900': '#312e81',
-        }
+        },
+        // --- PENAMBAHAN WARNA FUTURISTIK ---
+        'teal-400': '#34d399', // Warna Aksen Crypto (Hijau Neon)
+        'pink-500': '#ec4899', // Warna Aksen Crypto (Pink Neon)
       }
     },
   },
   plugins: [
     // Plugins di-require di sini
     require('@tailwindcss/line-clamp'), 
-    require('@tailwindcss/typography'),
+    require('@tailwindcss/typography'), // Penting untuk styling Markdown
   ],
 };
 
